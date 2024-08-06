@@ -3,6 +3,7 @@ from __future__ import annotations
 import abc
 
 from modules.authority.domain.model.tenant import TenantId, Tenant
+from modules.authority.domain.model.user import UserId
 
 
 class TenantRepository(abc.ABC):
@@ -20,4 +21,8 @@ class TenantRepository(abc.ABC):
 
     @abc.abstractmethod
     def get(self, tenant_id: TenantId) -> Tenant | None:
+        pass
+
+    @abc.abstractmethod
+    def tenants_with_user_id(self, user_id: UserId) -> set[Tenant]:
         pass

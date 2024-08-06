@@ -4,8 +4,7 @@ from dataclasses import dataclass
 
 from modules.authority.domain.model.session import SessionId, Token
 from modules.authority.domain.model.user import UserId
-from modules.authority.exception import ErrorCode
-from exception import SystemException
+from exception import SystemException, ErrorCode
 
 
 @dataclass(init=True, unsafe_hash=False, frozen=False)

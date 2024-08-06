@@ -3,9 +3,8 @@ from __future__ import annotations
 import abc
 import uuid
 
-from domain.model.user.account import Account
-from domain.model.user.mail import EmailAddress
-from domain.model.user import User, UserId
+from modules.authority.domain.model.user import User, UserId, EmailAddress
+from modules.authority.domain.model.user.account import Account
 
 
 class UserRepository(abc.ABC):

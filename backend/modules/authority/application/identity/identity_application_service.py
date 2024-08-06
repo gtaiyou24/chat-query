@@ -1,0 +1,152 @@
+from __future__ import annotations
+
+import os
+
+from injector import singleton, inject
+
+from exception import SystemException, ErrorCode
+from modules.authority.application.identity.command import ProvisionTenantCommand, AuthenticateUserCommand, \
+    RefreshCommand, RevokeCommand
+from modules.authority.application.identity.dpo import TenantDpo, SessionDpo, UserDpo
+from modules.authority.application.identity.subscriber import UserProvisionedSubscriber
+from modules.authority.domain.model.mail import SendMailService
+from modules.authority.domain.model.session import SessionRepository
+from modules.authority.domain.model.tenant import Tenant, TenantRepository
+from modules.authority.domain.model.tenant.project import ProjectRepository
+from modules.authority.domain.model.user import User, UserRepository, EmailAddress, Token
+from modules.common.application import transactional
+from modules.common.domain.model import DomainEventPublisher
+
+
+@singleton
+@inject
+class IdentityApplicationService:
+    project_repository: ProjectRepository
+    send_mail_service: SendMailService
+    session_repository: SessionRepository
+    tenant_repository: TenantRepository
+    user_repository: UserRepository
+
+    def __init__(self):
+        # サブスクライバを登録
+        DomainEventPublisher.instance().subscribe(UserProvisionedSubscriber())
+
+    @transactional
+    def provision_tenant(self, command: ProvisionTenantCommand) -> TenantDpo:
+        """テナントを登録
+
+        テナントを登録する際に以下の情報も登録する。
+
+        - ユーザー : 認証/認可の単位となる概念であり、サービスを利用する実体。
+                    テナント登録時にテナントの管理者として、登録する。
+        - プロジェクト : テナントはいくつかのプロジェクトを管理することができる。
+                       会社の場合は、各部署ごとにプロジェクトを作成し、操作する。
+                       テナント登録時は、’No Project’というプロジェクトを登録し、ユーザーはそのプロジェクト以下で操作する。
+
+        また、ユーザーが登録されたときに、メアド検証メールを送信する。
+        """
+        # テナントを作成
+        tenant_id = self.tenant_repository.next_identity()
+        tenant = Tenant.provision(tenant_id, command.tenant.name)
+
+        # ユーザーを新規作成
+        user_id = self.user_repository.next_identity()
+        user = User.provision(
+            user_id,
+            command.user.username,
+            EmailAddress(command.user.email_address),
+            command.user.plain_password
+        )
+
+        # ユーザーをテナントに管理者として追加
+        tenant.register_admin_member(user)
+        # プロジェクトを作成
+        project_id = self.project_repository.next_identity()
+        project = tenant.create_project(project_id, 'no project')
+
+        self.tenant_repository.add(tenant)
+        self.user_repository.add(user)
+        self.project_repository.add(project)
+        return TenantDpo(tenant)
+
+    @transactional
+    def verify_email(self, verification_token: str) -> SessionDpo:
+        """メアド検証トークン指定でユーザーを有効化し、セッションを発行する"""
+        user = self.user_repository.user_with_token(verification_token)
+        if user is None or user.token_with(verification_token).has_expired():
+            raise SystemException(ErrorCode.VALID_TOKEN_DOES_NOT_EXISTS,f"{verification_token}は無効なトークンです。")
+
+        user.verified()
+        session = user.login(self.session_repository.next_identity())
+
+        self.user_repository.add(user)
+        self.session_repository.save(session)
+
+        return SessionDpo(session)
+
+    @transactional
+    def authenticate(self, command: AuthenticateUserCommand) -> SessionDpo | None:
+        """ユーザー認証し、セッションを発行する"""
+        email_address = EmailAddress(command.email_address)
+        user = self.user_repository.user_with_email_address(email_address)
+
+        # 該当ユーザーが存在するか、パスワードは一致しているか
+        if user is None or not user.verify_password(command.password):
+            raise SystemException(ErrorCode.LOGIN_BAD_CREDENTIALS,
+                                  f"メールアドレス {email_address.text} のユーザーが見つかりませんでした。")
+
+        # メールアドレス検証が終わっていない場合は、確認メールを再送信する
+        if not user.is_verified():
+            token = user.generate(Token.Type.VERIFICATION)
+            self.user_repository.add(user)
+            self.send_mail_service.send(
+                user.email_address,
+                "メールアドレスを確認します",
+                f"""
+                    <html>
+                    <body>
+                        <h1>メールアドレスの確認をします</h1>
+                        <a href="{os.getenv('FRONTEND_URL')}/auth/new-verification?token={token.value}">
+                            こちらをクリックしてください。
+                        </a>
+                    </body>
+                    </html>
+                    """,
+            )
+            return None
+
+        session = user.login(self.session_repository.next_identity())
+        self.session_repository.save(session)
+
+        return SessionDpo(session)
+
+    @transactional
+    def refresh(self, command: RefreshCommand) -> SessionDpo:
+        """セッションを更新する"""
+        session = self.session_repository.session_with_token(command.refresh_token)
+        if session is None or session.token_with(command.refresh_token).has_expired():
+            raise SystemException(ErrorCode.SESSION_DOES_NOT_FOUND, f'{command.refresh_token} は無効なリフレッシュトークンです。')
+
+        session.refresh(command.refresh_token)
+        self.session_repository.save(session)
+
+        return SessionDpo(session)
+
+    @transactional
+    def revoke(self, command: RevokeCommand) -> None:
+        """セッションを削除して、ログアウトする"""
+        session = self.session_repository.session_with_token(command.token)
+        if session is None or session.token_with(command.token).has_expired():
+            raise SystemException(ErrorCode.SESSION_DOES_NOT_FOUND, f'{command.token} は無効なリフレッシュトークンです。')
+
+        self.session_repository.remove(session)
+
+    def user_with_session(self, token: str) -> UserDpo | None:
+        """セッションのトークン指定でユーザー情報を取得"""
+        session = self.session_repository.session_with_token(token)
+        if session is None or session.token_with(token).has_expired():
+            return None
+
+        user = self.user_repository.get(session.user_id)
+        tenants = self.tenant_repository.tenants_with_user_id(session.user_id)
+        return UserDpo(user, list(tenants))

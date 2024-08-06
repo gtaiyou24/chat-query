@@ -30,9 +30,13 @@ class ErrorLevel(Enum):
 class ErrorCode(Enum):
     COMMON_2001 = ("アクセス拒否", ErrorLevel.WARN, HTTPStatus.FORBIDDEN)
 
-    # スクレイピングサブドメイン
-    FAILED_TO_FETCH_WEB_PAGE = ("Webページの取得に失敗しました", ErrorLevel.WARN, HTTPStatus.BAD_GATEWAY)
-    FAILED_TO_EXTRACTING_DATA = ("データの抽出に失敗しました", ErrorLevel.WARN, HTTPStatus.INTERNAL_SERVER_ERROR)
+    # 認証コンテキスト
+    LOGIN_BAD_CREDENTIALS = ("メールアドレスまたはパスワードが間違っています", ErrorLevel.WARN, HTTPStatus.UNAUTHORIZED)
+    SESSION_DOES_NOT_FOUND = (
+        "セッションが見つからない、もしくはすでに有効期限を過ぎています", ErrorLevel.ERROR, HTTPStatus.BAD_REQUEST)
+    USER_DOES_NOT_FOUND = ("該当ユーザーが見つかりません。", ErrorLevel.WARN, HTTPStatus.NOT_FOUND)
+    VALID_TOKEN_DOES_NOT_EXISTS = (
+        "トークンが見つからない、もしくはすでに有効期限を過ぎています", ErrorLevel.ERROR, HTTPStatus.BAD_REQUEST)
 
     def __init__(self, message: str, error_level: ErrorLevel, http_status: HTTPStatus):
         self.message = message

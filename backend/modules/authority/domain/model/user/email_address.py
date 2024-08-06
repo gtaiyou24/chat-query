@@ -4,22 +4,17 @@ from dataclasses import dataclass
 
 @dataclass(init=False, unsafe_hash=True, eq=True, frozen=True)
 class EmailAddress:
-    value: str
+    text: str
 
-    def __init__(self, value: str):
-        assert value, "メールアドレスは必須です。"
-        assert (
-            0 < len(value) <= 100
-        ), "メールアドレスは100文字以下である必要があります。"
-        assert re.match(
-            r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", value
-        ), "メールアドレスが不正です。"
-
-        super().__setattr__("value", value)
+    def __init__(self, text: str):
+        assert text, "メールアドレスは必須です。"
+        assert 0 < len(text) <= 100, "メールアドレスは100文字以下である必要があります。"
+        assert re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", text), "メールアドレスが不正です。"
+        super().__setattr__("text", text)
 
     def __str__(self):
-        return self.value
+        return self.text
 
     @property
     def domain(self) -> str:
-        return self.value.split("@")[1]
+        return self.text.split("@")[1]

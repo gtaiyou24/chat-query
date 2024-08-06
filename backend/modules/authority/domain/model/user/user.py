@@ -6,7 +6,8 @@ from datetime import datetime
 from modules.authority.domain.model.user.account import Account
 from modules.authority.domain.model.session import SessionId, Session
 from modules.authority.domain.model.user import EmailAddress, Token, EncryptionService, UserId
-from modules.common.domain.model import DomainRegistry
+from modules.authority.domain.model.user.user_provisioned import UserProvisioned
+from modules.common.domain.model import DomainRegistry, DomainEventPublisher
 
 
 @dataclass(init=True, eq=False)
@@ -29,18 +30,40 @@ class User:
         return hash(self.id)
 
     @staticmethod
-    def provision(id: UserId, username: str, email_address: EmailAddress, plain_password: str | None) -> User:
+    def provision(id: UserId,
+                  username: str,
+                  email_address: EmailAddress,
+                  plain_password: str | None = None,
+                  account: Account | None = None) -> User:
         """ユーザーを作成する"""
-        return User(
+        # ドメインイベントを発行する
+        domain_event = UserProvisioned(id)
+        DomainEventPublisher.instance().publish(domain_event)
+
+        enable = False
+        accounts = set()
+        verified_at = None
+        if account:
+            enable = True
+            accounts.add(account)
+            verified_at = datetime.now()
+
+        user = User(
             id,
             username,
             email_address,
             DomainRegistry.resolve(EncryptionService).encrypt(plain_password) if plain_password else None,
             set(),
-            False,
-            set(),
-            None,
+            enable,
+            accounts,
+            verified_at,
         )
+
+        if enable is False:
+            # メアド検証用のトークンを発行する
+            user.generate(Token.Type.VERIFICATION)
+
+        return user
 
     def verify_password(self, plain_password: str) -> bool:
         if self.encrypted_password is None:

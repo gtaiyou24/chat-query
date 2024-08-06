@@ -1,26 +1,19 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from enum import Enum
 
-from modules.authority.domain.model.tenant import TenantId
+from modules.authority.domain.model.tenant import TenantId, Invitation
+from modules.authority.domain.model.tenant.member import Member
+from modules.authority.domain.model.tenant.project import Project, ProjectId
+from modules.authority.domain.model.user import EmailAddress, User
 
 
 @dataclass(init=True, eq=False)
 class Tenant:
-    class Type(Enum):
-        PERSONAL = 'personal'
-        ORGANIZATION = 'organization'
-
-        def is_personal(self) -> bool:
-            return self == Tenant.Type.PERSONAL
-
-        def is_organization(self) -> bool:
-            return self == Tenant.Type.ORGANIZATION
-
     id: TenantId
     name: str
-    type: Type
+    invitations: set[Invitation]
+    members: set[Member]
 
     def __hash__(self):
         return hash(self.id.value)
@@ -29,3 +22,25 @@ class Tenant:
         if not isinstance(other, Tenant):
             return False
         return self.id == other.id
+
+    @staticmethod
+    def provision(id: TenantId, name: str) -> Tenant:
+        return Tenant(id, name, set(), set())
+
+    def register_admin_member(self, user: User) -> Member:
+        admin = Member(user.id, Member.Role.ADMIN)
+        self.members.add(admin)
+        return admin
+
+    def create_project(self, project_id: ProjectId, name: str) -> Project:
+        return Project(project_id, self.id, name)
+
+    def invite(self, mail: EmailAddress) -> Invitation:
+        """メールアドレス指定でメンバーを招待する"""
+        invitation = Invitation.generate(mail)
+        self.invitations.add(invitation)
+        return invitation
+
+    def withdraw_invitation(self, code: str) -> None:
+        """招待状を破棄する"""
+        self.invitations = set([e for e in self.invitations if e.code != code])

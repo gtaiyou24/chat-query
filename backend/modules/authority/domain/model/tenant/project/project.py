@@ -2,12 +2,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from modules.authority.domain.model.tenant import TenantId
 from modules.authority.domain.model.tenant.project import ProjectId
 
 
-@dataclass(init=False, eq=False)
+@dataclass(init=True, eq=False)
 class Project:
     id: ProjectId
+    tenant_id: TenantId
     name: str
 
     def __hash__(self):

@@ -13,9 +13,27 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse
 
 from exception import SystemException
+from modules.authority.domain.model.mail import SendMailService
+from modules.authority.domain.model.session import SessionRepository
+from modules.authority.domain.model.tenant import TenantRepository
+from modules.authority.domain.model.tenant.project import ProjectRepository
+from modules.authority.domain.model.user import UserRepository
 from modules.common.application import UnitOfWork
-from port.adapter.persistence.repository.rdb import RDBUnitOfWork, DataBase
+from port.adapter.persistence.repository.inmem import InMemSessionRepository, InMemTenantRepository, \
+    InMemUserRepository, InMemProjectRepository
+from port.adapter.persistence.repository.mysql import DataBase, MySQLUnitOfWork
+from port.adapter.persistence.repository.mysql.project import MySQLProjectRepository
+from port.adapter.persistence.repository.mysql.session import MySQLSessionRepository
+from port.adapter.persistence.repository.mysql.tenant import MySQLTenantRepository
+from port.adapter.persistence.repository.mysql.user import MySQLUserRepository
+from port.adapter.resource.auth import AuthResource
 from port.adapter.resource.health import HealthResource
+from port.adapter.service.mail import SendMailServiceImpl
+from port.adapter.service.mail.adapter import MailDeliveryAdapter
+from port.adapter.service.mail.adapter.gmail import GmailAdapter
+from port.adapter.service.mail.adapter.mailhog import MailHogAdapter
+from port.adapter.service.mail.adapter.sendgrid import SendGridAdapter
+from port.adapter.service.mail.adapter.stub import MailDeliveryAdapterStub
 
 
 @asynccontextmanager
@@ -24,10 +42,23 @@ async def lifespan(app: FastAPI):
     load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
 
     DIContainer.instance().register(
-        DI.of(UnitOfWork, {"RDB": RDBUnitOfWork}, RDBUnitOfWork),
+        # Persistence
+        DI.of(UnitOfWork, {"MySQL": MySQLUnitOfWork}, MySQLUnitOfWork),
+        DI.of(ProjectRepository, {"MySQL": MySQLProjectRepository}, InMemProjectRepository),
+        DI.of(SessionRepository, {"MySQL": MySQLSessionRepository}, InMemSessionRepository),
+        DI.of(TenantRepository, {"MySQL": MySQLTenantRepository}, InMemTenantRepository),
+        DI.of(UserRepository, {"MySQL": MySQLUserRepository}, InMemUserRepository),
+        # Service
+        DI.of(SendMailService, {}, SendMailServiceImpl),
+        # Adapter
+        DI.of(
+            MailDeliveryAdapter,
+            {"SendGrid": SendGridAdapter, "MailHog": MailHogAdapter, "Gmail": GmailAdapter},
+            MailDeliveryAdapterStub
+        ),
     )
 
-    if "RDB" in os.getenv("DI_PROFILE_ACTIVES", []):
+    if "MySQL" in os.getenv("DI_PROFILE_ACTIVES", []):
         engine = create_engine(os.getenv("DATABASE_URL"), echo=os.getenv("SLF4PY_LOG_LEVEL", "DEBUG") == "DEBUG")
         DIContainer.instance().register(DI.of(Engine, {}, engine))
         DataBase.metadata.create_all(bind=engine)
@@ -44,6 +75,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.include_router(AuthResource().router)
 app.include_router(HealthResource().router)
 
 
