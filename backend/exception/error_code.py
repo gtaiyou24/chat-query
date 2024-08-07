@@ -35,6 +35,7 @@ class ErrorCode(Enum):
     SESSION_DOES_NOT_FOUND = (
         "セッションが見つからない、もしくはすでに有効期限を過ぎています", ErrorLevel.ERROR, HTTPStatus.BAD_REQUEST)
     USER_DOES_NOT_FOUND = ("該当ユーザーが見つかりません。", ErrorLevel.WARN, HTTPStatus.NOT_FOUND)
+    USER_IS_NOT_VERIFIED = ("該当ユーザーの認証が完了していません。", ErrorLevel.WARN, HTTPStatus.FORBIDDEN)
     VALID_TOKEN_DOES_NOT_EXISTS = (
         "トークンが見つからない、もしくはすでに有効期限を過ぎています", ErrorLevel.ERROR, HTTPStatus.BAD_REQUEST)
 

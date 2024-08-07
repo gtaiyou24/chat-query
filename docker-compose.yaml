@@ -26,6 +26,8 @@ services:
         condition: service_healthy
       postgresql:
         condition: service_healthy
+      redis:
+        condition: service_healthy
 
   # Next.js
   frontend:
@@ -91,6 +93,21 @@ services:
       retries: 3
       start_period: 30s
 
+  redis:
+    image: redis:7.4
+    platform: linux/x86_64
+    container_name: analytics-gpt-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - analytics-gpt-redis-volume:/data
+    tty: true
+    healthcheck:
+      test: [ 'CMD', 'redis-cli', 'ping' ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
   # Mail Server
   mailhog:
     image: mailhog/mailhog
@@ -104,4 +121,7 @@ volumes:
     driver: 'local'
   # Postgresql
   analytics-gpt-postgresql-volume:
+    driver: 'local'
+  # redis
+  analytics-gpt-redis-volume:
     driver: 'local'

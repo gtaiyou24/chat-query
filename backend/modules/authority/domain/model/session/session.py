@@ -70,3 +70,9 @@ class Session:
             if latest_token is None or token.is_published_after(latest_token.published_at):
                 latest_token = token
         return latest_token
+
+    def latest_access_token(self) -> Token | None:
+        return self.latest_token_of(Token.Type.ACCESS)
+
+    def latest_refresh_token(self) -> Token | None:
+        return self.latest_token_of(Token.Type.REFRESH)

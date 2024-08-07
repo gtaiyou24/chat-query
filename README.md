@@ -15,7 +15,25 @@ Then run `docker-compose up` to start the server.
 docker-compose up --build
 ```
 
-| 💻      | 🔗                                                       |
-|:--------|:---------------------------------------------------------|
-| Front   | [http://localhost:3000](http://localhost:3000)           |
-| OpenAPI | [http://localhost:8000/docs](http://localhost:8000/docs) |
+ - [Front](http://localhost:3000)
+ - [Swagger UI](http://localhost:8000/docs)
+ - [MailHog](http://0.0.0.0:8025/)
+
+**Appendix**
+
+```bash
+# connect to redis
+redis-cli
+```
+
+```bash
+mysql -h 127.0.0.1 -P 3306 -u user -p
+# Enter password: pass
+```
+
+### ✅ Test
+
+```bash
+pip install pytest pytest-env httpx
+pytest -v ./test
+```
