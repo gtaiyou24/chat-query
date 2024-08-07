@@ -14,6 +14,10 @@ class DomainEventSubscriberImpl(DomainEventSubscriber[DomainEvent]):
     event_store = []
 
     @override
+    def subscribed_to_event_type(self) -> type[DomainEvent]:
+        return DomainEvent
+
+    @override
     def handle_event(self, domain_event: DomainEvent):
         self.event_store.append(domain_event)
 

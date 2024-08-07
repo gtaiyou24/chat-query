@@ -48,7 +48,7 @@ class UsersTableRow(DataBase):
         return UsersTableRow(
             id=user.id.value,
             username=user.username,
-            email_address=user.email_address.value,
+            email_address=user.email_address.text,
             password=user.encrypted_password,
             enable=user.enable,
             verified_at=user.verified_at,
@@ -58,7 +58,7 @@ class UsersTableRow(DataBase):
 
     def update(self, user: User) -> None:
         self.username = user.username
-        self.email_address = user.email_address.value
+        self.email_address = user.email_address.text
         self.password = user.encrypted_password
         self.enable = user.enable
         self.verified_at = user.verified_at

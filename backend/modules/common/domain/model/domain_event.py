@@ -62,5 +62,6 @@ class DomainEventSubscriber[T](abc.ABC):
     def handle_event(self, domain_event: T) -> None:
         pass
 
+    @abc.abstractmethod
     def subscribed_to_event_type(self) -> type[T]:
-        return T.__class__
+        pass

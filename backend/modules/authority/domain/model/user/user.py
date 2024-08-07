@@ -5,8 +5,8 @@ from datetime import datetime
 
 from modules.authority.domain.model.user.account import Account
 from modules.authority.domain.model.session import SessionId, Session
-from modules.authority.domain.model.user import EmailAddress, Token, EncryptionService, UserId
-from modules.authority.domain.model.user.user_provisioned import UserProvisioned
+from modules.authority.domain.model.user import EmailAddress, Token, EncryptionService, UserId, \
+    VerificationTokenGenerated
 from modules.common.domain.model import DomainRegistry, DomainEventPublisher
 
 
@@ -36,10 +36,6 @@ class User:
                   plain_password: str | None = None,
                   account: Account | None = None) -> User:
         """ユーザーを作成する"""
-        # ドメインイベントを発行する
-        domain_event = UserProvisioned(id)
-        DomainEventPublisher.instance().publish(domain_event)
-
         enable = False
         accounts = set()
         verified_at = None
@@ -107,6 +103,13 @@ class User:
         """トークンを発行する"""
         token = type.generate()
         self.tokens.add(token)
+
+        if token.is_(Token.Type.VERIFICATION):
+            # ドメインイベントを発行する
+            DomainEventPublisher\
+                .instance()\
+                .publish(VerificationTokenGenerated(self.id, self.email_address, token))
+
         return token
 
     def login(self, session_id: SessionId) -> Session:

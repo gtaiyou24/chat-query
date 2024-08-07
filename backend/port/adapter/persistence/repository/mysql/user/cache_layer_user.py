@@ -32,7 +32,7 @@ class CacheLayerUser:
         return self.__driver_manager_user.find_by_ids(*user_id)
 
     def user_or_origin_with_email_address(self, email_address: EmailAddress) -> User | None:
-        key = f'email_address-{email_address.value}'
+        key = f'email_address-{email_address.text}'
         if key in self.values.keys():
             return self.values[key]
 
@@ -49,9 +49,9 @@ class CacheLayerUser:
     def set(self, user: User) -> None:
         self.__driver_manager_user.upsert(user)
         # キャッシュを更新する
-        self.values[f'email_address-{user.email_address.value}'] = user
+        self.values[f'email_address-{user.email_address.text}'] = user
 
     def delete(self, user: User) -> None:
         self.__driver_manager_user.delete(user)
         # キャッシュを更新する
-        self.values[f'email_address-{user.email_address.value}'] = None
+        self.values[f'email_address-{user.email_address.text}'] = None

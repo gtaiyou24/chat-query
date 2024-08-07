@@ -32,8 +32,6 @@ class IdentityApplicationService:
         self.session_repository = session_repository
         self.tenant_repository = tenant_repository
         self.user_repository = user_repository
-        # サブスクライバを登録
-        DomainEventPublisher.instance().subscribe(UserProvisionedSubscriber())
 
     @transactional
     def provision_tenant(self, command: ProvisionTenantCommand) -> TenantDpo:
@@ -49,6 +47,9 @@ class IdentityApplicationService:
 
         また、ユーザーが登録されたときに、メアド検証メールを送信する。
         """
+        # サブスクライバを登録
+        DomainEventPublisher.instance().subscribe(UserProvisionedSubscriber())
+
         # テナントを作成
         tenant_id = self.tenant_repository.next_identity()
         tenant = Tenant.provision(tenant_id, command.tenant.name)
@@ -68,8 +69,8 @@ class IdentityApplicationService:
         project_id = self.project_repository.next_identity()
         project = tenant.create_project(project_id, 'no project')
 
-        self.tenant_repository.add(tenant)
         self.user_repository.add(user)
+        self.tenant_repository.add(tenant)
         self.project_repository.add(project)
         return TenantDpo(tenant)
 
@@ -78,7 +79,7 @@ class IdentityApplicationService:
         """メアド検証トークン指定でユーザーを有効化し、セッションを発行する"""
         user = self.user_repository.user_with_token(verification_token)
         if user is None or user.token_with(verification_token).has_expired():
-            raise SystemException(ErrorCode.VALID_TOKEN_DOES_NOT_EXISTS,f"{verification_token}は無効なトークンです。")
+            raise SystemException(ErrorCode.VALID_TOKEN_DOES_NOT_EXISTS, f"{verification_token}は無効なトークンです。")
 
         user.verified()
         session = user.login(self.session_repository.next_identity())
@@ -101,22 +102,8 @@ class IdentityApplicationService:
 
         # メールアドレス検証が終わっていない場合は、確認メールを再送信する
         if not user.is_verified():
-            token = user.generate(Token.Type.VERIFICATION)
+            user.generate(Token.Type.VERIFICATION)
             self.user_repository.add(user)
-            self.send_mail_service.send(
-                user.email_address,
-                "メールアドレスを確認します",
-                f"""
-                    <html>
-                    <body>
-                        <h1>メールアドレスの確認をします</h1>
-                        <a href="{os.getenv('FRONTEND_URL')}/auth/new-verification?token={token.value}">
-                            こちらをクリックしてください。
-                        </a>
-                    </body>
-                    </html>
-                    """,
-            )
             return None
 
         session = user.login(self.session_repository.next_identity())

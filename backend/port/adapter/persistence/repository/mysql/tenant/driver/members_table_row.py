@@ -24,9 +24,9 @@ class MembersTableRow(DataBase):
 
     id: Mapped[int] = mapped_column(Integer(), primary_key=True, nullable=False, autoincrement=True)
     tenant_id: Mapped[str] = mapped_column(ForeignKey('tenants.id', onupdate='CASCADE', ondelete='CASCADE'),
-                                           nullable=False, index=True)
+                                           nullable=False)
     user_id: Mapped[str] = mapped_column(ForeignKey('users.id', onupdate='CASCADE', ondelete='CASCADE'),
-                                         nullable=False, index=True)
+                                         nullable=False)
     role: Mapped[int] = mapped_column(EnumType(enum_class=MemberRoleField), nullable=False,
                                       comment='1=管理者, 2=編集者, 3=閲覧者')
 
