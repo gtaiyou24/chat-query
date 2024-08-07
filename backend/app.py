@@ -17,10 +17,10 @@ from modules.authority.domain.model.mail import SendMailService
 from modules.authority.domain.model.session import SessionRepository
 from modules.authority.domain.model.tenant import TenantRepository
 from modules.authority.domain.model.tenant.project import ProjectRepository
-from modules.authority.domain.model.user import UserRepository
+from modules.authority.domain.model.user import UserRepository, EncryptionService
 from modules.common.application import UnitOfWork
 from port.adapter.persistence.repository.inmem import InMemSessionRepository, InMemTenantRepository, \
-    InMemUserRepository, InMemProjectRepository
+    InMemUserRepository, InMemProjectRepository, InMemUnitOfWork
 from port.adapter.persistence.repository.mysql import DataBase, MySQLUnitOfWork
 from port.adapter.persistence.repository.mysql.project import MySQLProjectRepository
 from port.adapter.persistence.repository.mysql.session import MySQLSessionRepository
@@ -35,6 +35,7 @@ from port.adapter.service.mail.adapter.gmail import GmailAdapter
 from port.adapter.service.mail.adapter.mailhog import MailHogAdapter
 from port.adapter.service.mail.adapter.sendgrid import SendGridAdapter
 from port.adapter.service.mail.adapter.stub import MailDeliveryAdapterStub
+from port.adapter.service.user import EncryptionServiceImpl
 
 
 @asynccontextmanager
@@ -42,15 +43,21 @@ async def lifespan(app: FastAPI):
     """API 起動前と終了後に実行する処理を記載する"""
     load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
 
+    if "MySQL" in os.getenv("DI_PROFILE_ACTIVES", []):
+        engine = create_engine(os.getenv("DATABASE_URL"), echo=os.getenv("SLF4PY_LOG_LEVEL", "DEBUG") == "DEBUG")
+        DIContainer.instance().register(DI.of(Engine, {}, engine))
+        DataBase.metadata.create_all(bind=engine)
+
     DIContainer.instance().register(
         # Persistence
-        DI.of(UnitOfWork, {"MySQL": MySQLUnitOfWork}, MySQLUnitOfWork),
+        DI.of(UnitOfWork, {"MySQL": MySQLUnitOfWork}, InMemUnitOfWork),
         DI.of(ProjectRepository, {"MySQL": MySQLProjectRepository}, InMemProjectRepository),
         DI.of(SessionRepository, {"MySQL": MySQLSessionRepository}, InMemSessionRepository),
         DI.of(TenantRepository, {"MySQL": MySQLTenantRepository}, InMemTenantRepository),
         DI.of(UserRepository, {"MySQL": MySQLUserRepository}, InMemUserRepository),
         # Service
         DI.of(SendMailService, {}, SendMailServiceImpl),
+        DI.of(EncryptionService, {}, EncryptionServiceImpl),
         # Adapter
         DI.of(
             MailDeliveryAdapter,
@@ -58,12 +65,6 @@ async def lifespan(app: FastAPI):
             MailDeliveryAdapterStub
         ),
     )
-
-    if "MySQL" in os.getenv("DI_PROFILE_ACTIVES", []):
-        engine = create_engine(os.getenv("DATABASE_URL"), echo=os.getenv("SLF4PY_LOG_LEVEL", "DEBUG") == "DEBUG")
-        DIContainer.instance().register(DI.of(Engine, {}, engine))
-        DataBase.metadata.create_all(bind=engine)
-
     yield
     # 終了後
 

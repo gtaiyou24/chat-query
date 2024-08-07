@@ -5,7 +5,22 @@ import {TokenSet} from "next-auth";
 import {User} from "@/lib/types";
 
 
-export const postAuthToken = async (email: string, password: string)=> {
+export const postRegisterUser = async (username: string, email: string, password: string) =>  {
+    const {error} = await createBackendClient().POST("/auth/register", {
+        cache: "no-cache",
+        body: {
+            username: username,
+            email_address: email,
+            password: password
+        }
+    });
+    if (error) {
+        console.log(error);
+        throw Error('ユーザー登録に失敗しました。');
+    }
+}
+
+export const postAuthToken = async (email: string, password: string): Promise<TokenSet>=> {
     const {data, error} = await createBackendClient().POST("/auth/token", {
         cache: "no-cache",
         body: {
@@ -25,6 +40,21 @@ export const postAuthToken = async (email: string, password: string)=> {
     }
     return data as TokenSet;
 }
+
+export const putAuthToken = async (token?: string): Promise<TokenSet> => {
+    const {data, error} = await createBackendClient().PUT("/auth/token", {
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization": `bearer ${token ? token : (await auth())?.refreshToken}`
+        },
+        cache: "no-cache",
+    });
+    if (error) {
+        console.error(`トークンのリフレッシュに失敗しました。${error}`);
+    }
+    return data as TokenSet;
+};
 
 export const logout = async (token?: string) => {
     const { error } = await createBackendClient().DELETE("/auth/token", {
@@ -47,8 +77,8 @@ export const getMe = async (token?: string): Promise<User> => {
     }
     return {
         username: data.username,
-        emailAddress: data.emailAddress,
-        tenants: data.tenants,
+        emailAddress: data.email_address,
+        tenants: [],
         accounts: data.accounts.map((account: components["schemas"]["Account"]) => {
             return {provider: account.provider, providerAccountId: account.provider_account_id};
         })

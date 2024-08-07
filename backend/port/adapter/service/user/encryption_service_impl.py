@@ -2,7 +2,7 @@ from typing import override
 
 from passlib.context import CryptContext
 
-from domain.model.user import EncryptionService
+from modules.authority.domain.model.user import EncryptionService
 
 
 class EncryptionServiceImpl(EncryptionService):

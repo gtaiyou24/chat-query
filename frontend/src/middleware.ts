@@ -6,25 +6,11 @@ import {RequestCookies} from "next/dist/compiled/@edge-runtime/cookies";
 import {ApiError} from "next/dist/server/api-utils";
 import {apiAuthPrefix, authRoutes, DEFAULT_LOGIN_REDIRECT, publicRoutes} from "@/route";
 import {BASE_URL} from "@/lib/constants";
+import {putAuthToken} from "@/lib/backend";
 
 async function refreshAccessToken(token: JWT): Promise<JWT> {
-    console.log(`start refresh token ${token.refreshToken}!!`);
-    return fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/token`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            "Authorization": `bearer ${token.refreshToken}`
-        }})
-        .then(async (response) => {
-            const json = await response.json();
-            if (!response.ok) {
-                throw new ApiError(response.status, `${json.type}: ${json.title}`);
-            }
-            return json;
-        })
+    return putAuthToken(token.refreshToken)
         .then((tokenSet: TokenSet) => {
-            console.log(`Token is Refreshed!! {access_token: ${tokenSet.access_token}, refresh_token: ${tokenSet.refresh_token}} from ${token.refreshToken}`);
             return {
                 ...token,
                 accessToken: tokenSet.access_token,
@@ -83,7 +69,7 @@ export async function middleware(request: NextRequest) {
             if (e instanceof ApiError) {
                 switch (e.statusCode) {
                     case 400:
-                        console.error("リフレッシュトークンが無効なので強制ログアウトします");
+                        console.info("リフレッシュトークンが無効なので強制ログアウトします");
                         request.cookies.delete(process.env.AUTH_SESSION_COOKIE_NAME!);
                         return NextResponse.next({request: {headers: request.headers}});
                 }

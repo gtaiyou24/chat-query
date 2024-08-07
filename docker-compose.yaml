@@ -125,3 +125,7 @@ volumes:
   # redis
   analytics-gpt-redis-volume:
     driver: 'local'
+
+networks:
+  api-services:
+    external: true

@@ -19,15 +19,19 @@ from modules.common.domain.model import DomainEventPublisher
 
 
 @singleton
-@inject
 class IdentityApplicationService:
-    project_repository: ProjectRepository
-    send_mail_service: SendMailService
-    session_repository: SessionRepository
-    tenant_repository: TenantRepository
-    user_repository: UserRepository
-
-    def __init__(self):
+    @inject
+    def __init__(self,
+                 project_repository: ProjectRepository,
+                 send_mail_service: SendMailService,
+                 session_repository: SessionRepository,
+                 tenant_repository: TenantRepository,
+                 user_repository: UserRepository):
+        self.project_repository = project_repository
+        self.send_mail_service = send_mail_service
+        self.session_repository = session_repository
+        self.tenant_repository = tenant_repository
+        self.user_repository = user_repository
         # サブスクライバを登録
         DomainEventPublisher.instance().subscribe(UserProvisionedSubscriber())
 
@@ -149,4 +153,4 @@ class IdentityApplicationService:
 
         user = self.user_repository.get(session.user_id)
         tenants = self.tenant_repository.tenants_with_user_id(session.user_id)
-        return UserDpo(user, list(tenants))
+        return UserDpo(user, tenants)

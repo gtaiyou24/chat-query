@@ -24,5 +24,5 @@ class TenantRepository(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def tenants_with_user_id(self, user_id: UserId) -> set[Tenant]:
+    def tenants_with_user_id(self, user_id: UserId) -> list[Tenant]:
         pass
