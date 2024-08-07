@@ -1,8 +1,7 @@
 import type {NextAuthConfig, User} from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import {apiAuthPrefix, authRoutes, DEFAULT_LOGIN_REDIRECT, publicRoutes} from "@/route";
-import {fetchMe, postAuthToken} from "@/lib/api";
-import {logout} from "@/client/fetcher";
+import {getMe, logout, postAuthToken} from "../backend";
 
 export default {
     providers: [
@@ -17,12 +16,12 @@ export default {
                         credentials.email as string,
                         credentials.password as string
                     );
-                    const user = await fetchMe(tokenSet.access_token);
+                    const user = await getMe(tokenSet.access_token);
                     return {
                         user: {
                             name: user.username,
-                            email: user.email_address,
-                            tenant: user.tenant,
+                            email: user.emailAddress,
+                            tenants: user.tenants,
                             accounts: user.accounts
                         },
                         accessToken: tokenSet.access_token,

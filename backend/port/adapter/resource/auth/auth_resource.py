@@ -1,12 +1,15 @@
 from di import DIContainer
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from exception import SystemException, ErrorCode
 from modules.authority.application.identity import IdentityApplicationService
-from modules.authority.application.identity.command import ProvisionTenantCommand, AuthenticateUserCommand
+from modules.authority.application.identity.command import ProvisionTenantCommand, AuthenticateUserCommand, \
+    RefreshCommand, RevokeCommand
 from port.adapter.resource import APIResource
 from port.adapter.resource.auth.request import RegisterTenantRequest, OAuth2PasswordRequest
 from port.adapter.resource.auth.response import TokenJson
+from port.adapter.resource.dependency import oauth2_scheme
+from port.adapter.resource.error import ErrorJson
 
 
 class AuthResource(APIResource):
@@ -17,7 +20,16 @@ class AuthResource(APIResource):
         self.router.add_api_route("/register", self.register, methods=["POST"], name="ユーザー登録")
         self.router.add_api_route("/unregister", self.unregister, methods=["DELETE"], name="ユーザー削除")
         self.router.add_api_route("/verify-email/{token}", self.verify_email, methods=["POST"], name='メールアドレス検証')
-        self.router.add_api_route("/token", self.token, methods=["POST"], response_model=TokenJson, name='トークンを発行')
+        self.router.add_api_route(
+            "/token",
+            self.token,
+            methods=["POST"],
+            response_model=TokenJson,
+            responses={403: {"model": ErrorJson}, 401: {"model": ErrorJson}},
+            name='トークンを発行'
+        )
+        self.router.add_api_route("/token", self.refresh, methods=["PUT"], response_model=TokenJson, name='トークンを更新')
+        self.router.add_api_route("/token", self.revoke, methods=["DELETE"], name='トークンを削除')
         self.router.add_api_route("/forgot-password", self.forgot_password, methods=["POST"], name='パスワードリセット')
         self.router.add_api_route("/reset-password", self.reset_password, methods=["POST"], name='パスワード再設定')
         self.router.add_api_route("/change-password", self.change_password, methods=["POST"], name="パスワード更新")
@@ -52,6 +64,17 @@ class AuthResource(APIResource):
         if dpo is None:
             raise SystemException(ErrorCode.USER_IS_NOT_VERIFIED, "メールアドレスの検証が完了していません。確認メールを送信しました。")
         return TokenJson.from_(dpo)
+
+    def refresh(self, token: str = Depends(oauth2_scheme)) -> TokenJson:
+        """トークンをリフレッシュ"""
+        command = RefreshCommand(token)
+        dpo = self.identity_application_service.refresh(command)
+        return TokenJson.from_(dpo)
+
+    def revoke(self, token: str = Depends(oauth2_scheme)) -> None:
+        """トークンを削除"""
+        command = RevokeCommand(token)
+        self.identity_application_service.revoke(command)
 
     def forgot_password(self) -> None:
         pass

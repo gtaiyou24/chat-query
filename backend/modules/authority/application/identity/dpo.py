@@ -18,4 +18,4 @@ class SessionDpo:
 @dataclass(init=True, unsafe_hash=True, frozen=True)
 class UserDpo:
     user: User
-    belong_to: list[Tenant]
+    tenants: list[Tenant]

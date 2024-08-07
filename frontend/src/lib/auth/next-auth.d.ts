@@ -17,13 +17,13 @@ declare module "next-auth" {
         user: {
             name?: string | null;
             email?: string | null;
-            tenant?: {
+            tenants: {
                 id: string;
                 name: string;
-            };
+            }[];
             accounts: {
                 provider: string;
-                provider_account_id: string;
+                providerAccountId: string;
             }[];
         };
         accessToken?: string;

@@ -31,6 +31,22 @@ mysql -h 127.0.0.1 -P 3306 -u user -p
 # Enter password: pass
 ```
 
+### 🛠️ Generate Typescript types from OpenAPI
+
+```bash
+cd frontend
+npm i openapi-fetch
+npm i -D openapi-typescript typescript
+```
+
+```bash
+npx openapi-typescript http://localhost:8000/openapi.json -o ./src/lib/backend/type.ts
+```
+
+Appendix
+
+ - [openapi-typescript | OpenAPI TypeScript](https://openapi-ts.pages.dev/introduction)
+
 ### ✅ Test
 
 ```bash
