@@ -22,7 +22,9 @@ export default function RootLayout({
     <html lang="ja">
       <body className={clsx(inter.className, 'flex min-h-screen w-full flex-col')}>
         <Provider>
-          {children}
+          <main className="flex-grow">
+            {children}
+          </main>
           <Footer />
           <Toaster />
         </Provider>

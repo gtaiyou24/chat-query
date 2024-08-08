@@ -21,11 +21,12 @@ docker-compose up --build
 
 **Appendix**
 
+Connect to Redis
 ```bash
-# connect to redis
 redis-cli
 ```
 
+Connect to MySQL
 ```bash
 mysql -h 127.0.0.1 -P 3306 -u user -p
 # Enter password: pass

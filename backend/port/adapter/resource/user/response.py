@@ -34,5 +34,5 @@ class UserJson(BaseModel):
     def from_(dpo: UserDpo) -> UserJson:
         return UserJson(id=dpo.user.id.value,
                         username=dpo.user.username,
-                        email_address=dpo.user.email_address.value,
+                        email_address=dpo.user.email_address.text,
                         accounts=UserJson.Account.from_(dpo))

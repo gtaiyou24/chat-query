@@ -1,12 +1,12 @@
 "use server";
 
-import {postVerificationToken} from "@/lib/api";
+import {postVerifyEmail} from "@/lib/backend";
 
-export const newVerification = async (token: string) => {
+export const newVerification = async (token: string): Promise<{success?: string; error?: string;}> => {
     try {
-        await postVerificationToken(token);
+        await postVerifyEmail(token);
     } catch (e) {
-        return { error: "トークンの検証に失敗しました。トークンが存在しない、もしくは有効期限が切れています。" };
+        return { error: "メールアドレスの確認に失敗しました。ログインして再送信してください。" };
     }
     return { success: "メールアドレスの確認が完了しました！" };
 };

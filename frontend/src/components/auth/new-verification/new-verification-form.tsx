@@ -24,8 +24,11 @@ export default function NewVerificationForm() {
 
         newVerification(token)
             .then((data) => {
-                setSuccess(data.success);
-                setError(data.error);
+                if (data?.success) {
+                    setSuccess(data.success);
+                } else {
+                    setError(data.error);
+                }
             })
             .catch(() => {
                 setError('エラーが発生しました。しばらくお待ちください。')

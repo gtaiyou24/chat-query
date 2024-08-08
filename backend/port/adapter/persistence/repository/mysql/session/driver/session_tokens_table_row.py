@@ -34,7 +34,7 @@ class SessionTokensTableRow(DataBase):
     published_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, comment="トークン発行日時")
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, comment="トークン失効日時")
 
-    session = relationship("SessionsTableRow", back_populates="tokens")
+    session = relationship("SessionsTableRow", back_populates="tokens", lazy='joined')
 
     @staticmethod
     def create(session: Session) -> list[SessionTokensTableRow]:

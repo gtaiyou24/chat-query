@@ -30,7 +30,7 @@ class DriverManagerUser:
     def find_by_email_address(self, email_address: EmailAddress) -> User | None:
         with self.__unit_of_work.query() as q:
             optional: UsersTableRow | None = q.query(UsersTableRow)\
-                .filter_by(email_address=email_address.value, deleted=False)\
+                .filter_by(email_address=email_address.text, deleted=False)\
                 .one_or_none()
             return optional.to_entity() if optional else None
 

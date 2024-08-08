@@ -1,10 +1,10 @@
 from di import DIContainer
 from fastapi import APIRouter, Depends
 
-from exception import SystemException, ErrorCode
 from modules.authority.application.identity import IdentityApplicationService
 from modules.authority.application.identity.command import ProvisionTenantCommand, AuthenticateUserCommand, \
     RefreshCommand, RevokeCommand
+from modules.authority.application.identity.dpo import UserDpo
 from port.adapter.resource import APIResource
 from port.adapter.resource.auth.request import RegisterTenantRequest, OAuth2PasswordRequest
 from port.adapter.resource.auth.response import TokenJson
@@ -19,7 +19,13 @@ class AuthResource(APIResource):
         self.__identity_application_service = None
         self.router.add_api_route("/register", self.register, methods=["POST"], name="ユーザー登録")
         self.router.add_api_route("/unregister", self.unregister, methods=["DELETE"], name="ユーザー削除")
-        self.router.add_api_route("/verify-email/{token}", self.verify_email, methods=["POST"], name='メールアドレス検証')
+        self.router.add_api_route(
+            "/verify-email/{token}",
+            self.verify_email,
+            methods=["POST"],
+            response_model=None,
+            name='メールアドレス検証'
+        )
         self.router.add_api_route(
             "/token",
             self.token,
@@ -61,8 +67,6 @@ class AuthResource(APIResource):
         """トークンを発行"""
         command = AuthenticateUserCommand(request.email_address, request.password)
         dpo = self.identity_application_service.authenticate(command)
-        if dpo is None:
-            raise SystemException(ErrorCode.USER_IS_NOT_VERIFIED, "メールアドレスの検証が完了していません。確認メールを送信しました。")
         return TokenJson.from_(dpo)
 
     def refresh(self, token: str = Depends(oauth2_scheme)) -> TokenJson:

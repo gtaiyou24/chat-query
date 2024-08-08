@@ -20,6 +20,17 @@ export const postRegisterUser = async (username: string, email: string, password
     }
 }
 
+export const postVerifyEmail = async (token: string): Promise<TokenSet> => {
+    const { data, error } = await createBackendClient().POST("/auth/verify-email/{token}", {
+        headers: { 'Content-Type': 'application/json' },
+        params: { path: { token: token } },
+    })
+    if (error) {
+        throw Error();
+    }
+    return data as TokenSet;
+}
+
 export const postAuthToken = async (email: string, password: string): Promise<TokenSet>=> {
     const {data, error} = await createBackendClient().POST("/auth/token", {
         cache: "no-cache",

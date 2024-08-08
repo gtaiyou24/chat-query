@@ -75,22 +75,26 @@ class IdentityApplicationService:
         return TenantDpo(tenant)
 
     @transactional
-    def verify_email(self, verification_token: str) -> SessionDpo:
+    def verify_email(self, verification_token: str) -> None:
         """メアド検証トークン指定でユーザーを有効化し、セッションを発行する"""
         user = self.user_repository.user_with_token(verification_token)
         if user is None or user.token_with(verification_token).has_expired():
             raise SystemException(ErrorCode.VALID_TOKEN_DOES_NOT_EXISTS, f"{verification_token}は無効なトークンです。")
 
         user.verified()
-        session = user.login(self.session_repository.next_identity())
-
         self.user_repository.add(user)
-        self.session_repository.save(session)
 
-        return SessionDpo(session)
+    def user_with_token(self, value: str) -> UserDpo:
+        session = self.session_repository.session_with_token(value)
+        if session is None or session.token_with(value).has_expired():
+            raise SystemException(ErrorCode.SESSION_DOES_NOT_FOUND, f"トークン {value} に該当するセッションが見つかりません。")
+
+        user = self.user_repository.get(session.user_id)
+        tenants = self.tenant_repository.tenants_with_user_id(user.id)
+        return UserDpo(user, tenants)
 
     @transactional
-    def authenticate(self, command: AuthenticateUserCommand) -> SessionDpo | None:
+    def authenticate(self, command: AuthenticateUserCommand) -> SessionDpo:
         """ユーザー認証し、セッションを発行する"""
         email_address = EmailAddress(command.email_address)
         user = self.user_repository.user_with_email_address(email_address)
@@ -104,7 +108,7 @@ class IdentityApplicationService:
         if not user.is_verified():
             user.generate(Token.Type.VERIFICATION)
             self.user_repository.add(user)
-            return None
+            raise SystemException(ErrorCode.USER_IS_NOT_VERIFIED, "メールアドレスの検証が完了していません。確認メールを送信しました。")
 
         session = user.login(self.session_repository.next_identity())
         self.session_repository.save(session)
