@@ -1,23 +1,32 @@
 import {UserNav} from "@/components/layout/navbar/user-nav";
 import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet";
 import {Button} from "@/components/ui/button";
-import {ChevronDownIcon, Home, LineChart, Package, Package2, PanelLeft, ShoppingCart, Users2} from "lucide-react";
+import {
+    Home,
+    LineChart,
+    Package,
+    Package2,
+    PanelLeft,
+    ShoppingCart,
+    Slash,
+    Users2
+} from "lucide-react";
 import Link from "next/link";
 import {
     Breadcrumb,
     BreadcrumbItem,
-    BreadcrumbLink,
-    BreadcrumbList, BreadcrumbPage,
+    BreadcrumbList,
     BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 import ProjectNav from "@/components/layout/navbar/project-nav";
-import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
+import TenantNav from "@/components/layout/navbar/tenant-nav";
+import ThemeToggle from "@/components/layout/navbar/theme-toggle";
 
 export default function Navbar() {
     return (
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
             <MobileNav />
-            <ProjectNav />
+            <TenantProjectSelector />
             <UserNav />
         </header>
     );
@@ -41,6 +50,12 @@ function MobileNav() {
                         <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
                         <span className="sr-only">Vercel</span>
                     </Link>
+
+                    <div className="grid gap-2">
+                        <TenantNav />
+                        <ProjectNav />
+                    </div>
+
                     <Link
                         href="#"
                         className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
@@ -82,36 +97,18 @@ function MobileNav() {
     );
 }
 
-function DashboardBreadcrumb() {
+function TenantProjectSelector() {
     return (
-        <Breadcrumb className="hidden md:flex">
+        <Breadcrumb className="hidden md:block">
             <BreadcrumbList>
                 <BreadcrumbItem>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger className="flex items-center gap-1">
-                            Components
-                            <ChevronDownIcon />
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="start">
-                            <DropdownMenuItem>Documentation</DropdownMenuItem>
-                            <DropdownMenuItem>Themes</DropdownMenuItem>
-                            <DropdownMenuItem>GitHub</DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    <TenantNav />
                 </BreadcrumbItem>
-                <BreadcrumbSeparator />
+                <BreadcrumbSeparator>
+                    <Slash  />
+                </BreadcrumbSeparator>
                 <BreadcrumbItem>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger className="flex items-center gap-1">
-                            Components
-                            <ChevronDownIcon />
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="start">
-                            <DropdownMenuItem>Documentation</DropdownMenuItem>
-                            <DropdownMenuItem>Themes</DropdownMenuItem>
-                            <DropdownMenuItem>GitHub</DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    <ProjectNav />
                 </BreadcrumbItem>
             </BreadcrumbList>
         </Breadcrumb>

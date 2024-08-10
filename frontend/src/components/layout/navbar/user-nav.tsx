@@ -17,7 +17,7 @@ export async function UserNav() {
 
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger className="ml-auto" asChild>
                 <Button
                     variant="outline"
                     size="icon"

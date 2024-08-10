@@ -5,6 +5,8 @@ import Link from "next/link";
 import Navbar from "@/components/layout/navbar";
 import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip";
 import {NavItem} from "@/components/layout/dashboard/nav-item";
+import ThemeToggle from "@/components/layout/navbar/theme-toggle";
+import Logo from "@/components/logo";
 
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -30,7 +32,7 @@ function DesktopNav() {
                     href="https://vercel.com/templates/next.js/admin-dashboard-tailwind-postgres-react-nextjs"
                     className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
                 >
-                    {/*<VercelLogo className="h-3 w-3 transition-all group-hover:scale-110" />*/}
+                    <Logo width={40} height={40} className="transition-all group-hover:scale-110" />
                     <span className="sr-only">Acme Inc</span>
                 </Link>
 
@@ -47,6 +49,7 @@ function DesktopNav() {
                 </NavItem>
             </nav>
             <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
+                <ThemeToggle />
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <Link

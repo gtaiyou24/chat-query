@@ -21,8 +21,8 @@ import {
 
 const frameworks = [
     {
-        value: "default project",
-        label: "Default Project",
+        value: "next.js",
+        label: "田村大耀",
     },
     {
         value: "sveltekit",
@@ -42,9 +42,9 @@ const frameworks = [
     },
 ]
 
-export default function ProjectNav() {
+export default function TenantNav() {
     const [open, setOpen] = React.useState(false)
-    const [value, setValue] = React.useState("default project")
+    const [value, setValue] = React.useState("next.js")
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -61,10 +61,10 @@ export default function ProjectNav() {
             </PopoverTrigger>
             <PopoverContent className="w-[200px] p-0">
                 <Command>
-                    <CommandInput placeholder="プロジェクトを検索..." />
+                    <CommandInput placeholder="チームを検索..." />
                     <CommandList>
                         <CommandEmpty>No framework found.</CommandEmpty>
-                        <CommandGroup heading="プロジェクト">
+                        <CommandGroup heading="チーム">
                             {frameworks.map((framework) => (
                                 <CommandItem
                                     key={framework.value}
@@ -88,7 +88,7 @@ export default function ProjectNav() {
                         <CommandGroup>
                             <CommandItem>
                                 <CirclePlus className="mr-2 h-4 w-4" />
-                                <span>プロジェクトを新規作成</span>
+                                <span>チームを新規作成</span>
                             </CommandItem>
                         </CommandGroup>
                     </CommandList>
