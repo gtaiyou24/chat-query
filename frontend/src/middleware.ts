@@ -50,6 +50,7 @@ export async function middleware(request: NextRequest) {
     if (isTokenExpired) {
         // セッションを更新
         try {
+            console.log(`refresh token ... ${nextUrl}`);
             const newSessionToken = await encode({
                 salt: process.env.AUTH_SESSION_COOKIE_NAME!,
                 secret: process.env.AUTH_SECRET!,

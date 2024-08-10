@@ -10,3 +10,8 @@ export type User = {
         providerAccountId: string;
     }[];
 }
+
+export type Tenant = {
+    id: string;
+    name: string;
+};

@@ -1,6 +1,6 @@
 import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet";
 import {Button} from "@/components/ui/button";
-import {Home, LineChart, PanelLeft, Settings, ShoppingCart, Users2} from "lucide-react";
+import {Home, LineChart, Package, Package2, PanelLeft, Settings, ShoppingCart, Users2} from "lucide-react";
 import Link from "next/link";
 import Navbar from "@/components/layout/navbar";
 import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip";
@@ -12,14 +12,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <>
             <DesktopNav />
             <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-                {/*<Navbar />*/}
-
-                {/*<header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">*/}
-                {/*    <MobileNav />*/}
-                {/*    <DashboardBreadcrumb />*/}
-                {/*    <SearchInput />*/}
-                {/*    <User />*/}
-                {/*</header>*/}
+                <Navbar />
                 <main className="grid flex-1 items-start gap-2 p-4 sm:px-6 sm:py-0 md:gap-4 bg-muted/40">
                     {children}
                 </main>

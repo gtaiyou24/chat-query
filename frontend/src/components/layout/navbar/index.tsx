@@ -1,47 +1,119 @@
+import {UserNav} from "@/components/layout/navbar/user-nav";
+import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet";
+import {Button} from "@/components/ui/button";
+import {ChevronDownIcon, Home, LineChart, Package, Package2, PanelLeft, ShoppingCart, Users2} from "lucide-react";
 import Link from "next/link";
-import {clsx} from "clsx";
-import Logo from "@/components/logo";
-import {APP_NAME} from "@/lib/constants";
-import ThemeToggle from "@/components/layout/navbar/theme-toggle";
-
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList, BreadcrumbPage,
+    BreadcrumbSeparator
+} from "@/components/ui/breadcrumb";
+import ProjectNav from "@/components/layout/navbar/project-nav";
+import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
 
 export default function Navbar() {
     return (
-        <div className="fixed top-0 left-0 right-0 supports-backdrop-blur:bg-background/60 border-b bg-background/95 dark:bg-background/5 backdrop-blur z-20">
-            <nav className="h-16 flex items-center justify-between px-4 lg:px-12">
-                <div className="hidden lg:flex lg:gap-10 lg:items-center">
-                    <Link href="/" className="flex gap-2 items-center">
-                        <Logo width={40} height={40} />
-                        <span className="font-medium text-lg md:text-2xl">{APP_NAME}</span>
+        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+            <MobileNav />
+            <ProjectNav />
+            <UserNav />
+        </header>
+    );
+}
+
+function MobileNav() {
+    return (
+        <Sheet>
+            <SheetTrigger asChild>
+                <Button size="icon" variant="outline" className="sm:hidden">
+                    <PanelLeft className="h-5 w-5" />
+                    <span className="sr-only">Toggle Menu</span>
+                </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="sm:max-w-xs">
+                <nav className="grid gap-6 text-lg font-medium">
+                    <Link
+                        href="#"
+                        className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
+                    >
+                        <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
+                        <span className="sr-only">Vercel</span>
                     </Link>
-                </div>
-
-                <div className={clsx("flex items-center gap-2 lg:hidden")}>
-                    {/*<MobileSidebar />*/}
-                    <Link href="/" className="flex gap-1 items-center">
-                        <Logo width={35} height={35} />
-                        <span className="font-medium text-lg md:text-2xl">{APP_NAME}</span>
+                    <Link
+                        href="#"
+                        className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                    >
+                        <Home className="h-5 w-5" />
+                        Dashboard
                     </Link>
-                </div>
+                    <Link
+                        href="#"
+                        className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                    >
+                        <ShoppingCart className="h-5 w-5" />
+                        Orders
+                    </Link>
+                    <Link
+                        href="#"
+                        className="flex items-center gap-4 px-2.5 text-foreground"
+                    >
+                        <Package className="h-5 w-5" />
+                        Products
+                    </Link>
+                    <Link
+                        href="#"
+                        className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                    >
+                        <Users2 className="h-5 w-5" />
+                        Customers
+                    </Link>
+                    <Link
+                        href="#"
+                        className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                    >
+                        <LineChart className="h-5 w-5" />
+                        Settings
+                    </Link>
+                </nav>
+            </SheetContent>
+        </Sheet>
+    );
+}
 
-                <div className="hidden justify-center lg:flex lg:w-1/2 lg:gap-2">
-                    {/*<Suspense fallback={<SearchSkeleton />}>*/}
-                    {/*    <Supermarket />*/}
-                    {/*    <Search />*/}
-                    {/*</Suspense>*/}
-                </div>
-
-                <div className="flex justify-end lg:gap-4 items-center">
-                    <ThemeToggle />
-                    {/*<UserNav className={"hidden lg:flex"} />*/}
-                    {/*<HouseholdNav />*/}
-                    {/*<div className="lg:w-1/3">*/}
-                    {/*    <Suspense fallback={<OpenCart />}>*/}
-                    {/*        <Cart />*/}
-                    {/*    </Suspense>*/}
-                    {/*</div>*/}
-                </div>
-            </nav>
-        </div>
+function DashboardBreadcrumb() {
+    return (
+        <Breadcrumb className="hidden md:flex">
+            <BreadcrumbList>
+                <BreadcrumbItem>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger className="flex items-center gap-1">
+                            Components
+                            <ChevronDownIcon />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start">
+                            <DropdownMenuItem>Documentation</DropdownMenuItem>
+                            <DropdownMenuItem>Themes</DropdownMenuItem>
+                            <DropdownMenuItem>GitHub</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger className="flex items-center gap-1">
+                            Components
+                            <ChevronDownIcon />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start">
+                            <DropdownMenuItem>Documentation</DropdownMenuItem>
+                            <DropdownMenuItem>Themes</DropdownMenuItem>
+                            <DropdownMenuItem>GitHub</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </BreadcrumbItem>
+            </BreadcrumbList>
+        </Breadcrumb>
     );
 }

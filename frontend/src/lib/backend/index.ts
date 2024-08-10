@@ -2,7 +2,7 @@ import {auth} from "@/lib/auth/auth";
 import {createBackendClient} from "@/lib/backend/create-client";
 import {components} from "@/lib/backend/type";
 import {TokenSet} from "next-auth";
-import {User} from "@/lib/types";
+import {Tenant, User} from "@/lib/types";
 
 
 export const postRegisterUser = async (username: string, email: string, password: string) =>  {
@@ -94,4 +94,11 @@ export const getMe = async (token?: string): Promise<User> => {
             return {provider: account.provider, providerAccountId: account.provider_account_id};
         })
     } as User;
+}
+
+export const getTenants = async (token?: string): Promise<Tenant[]> => {
+    return [
+        {id: '1', name: 'テナント1'},
+        {id: '2', name: 'テナント2'},
+    ]
 }
