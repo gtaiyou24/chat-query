@@ -7,7 +7,7 @@
  - フレームワーク : [FastAPI](https://fastapi.tiangolo.com/)
  - DB : MySQL / Redis
  - インフラ環境 : GCP Cloud Run / [Neon](https://neon.tech/) / [Upstash](https://upstash.com/)
- - CI/CD : GitHub Actions
+ - CI/CD : [GitHub Actions](https://docs.github.com/ja/actions)
  - インフラツール : Terraform
  - エラー/ログ監視 : Sentry / Datadog
 
@@ -18,7 +18,7 @@
  - 認証 : [Auth.js(NextAuth.js V5)](https://authjs.dev/)
  - CSS : [Tailwind](https://tailwindcss.com/) / [shadcn/ui](https://ui.shadcn.com/) / [Headless UI](https://headlessui.com/)
  - グローバルステート管理 : [zustand](https://zustand-demo.pmnd.rs/)
- - CI/CD : GitHub Actions
+ - CI/CD : [GitHub Actions](https://docs.github.com/ja/actions)
  - インフラ環境 : GCP Cloud Run
  - インフラツール : Terraform
  - エラー/ログ監視 : Sentry / Datadog
