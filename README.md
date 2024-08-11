@@ -4,22 +4,24 @@
 ### 🔨Backend
 
  - 開発言語 : Python
- - フレームワーク : FastAPI
+ - フレームワーク : [FastAPI](https://fastapi.tiangolo.com/)
  - DB : MySQL / Redis
  - インフラ環境 : GCP Cloud Run / [Neon](https://neon.tech/) / [Upstash](https://upstash.com/)
  - CI/CD : GitHub Actions
  - インフラツール : Terraform
+ - エラー/ログ監視 : Sentry / Datadog
 
 ### 🔧Frontend
 
  - 開発言語 : TypeScript
- - フレームワーク : Next.js 14 App Router
+ - フレームワーク : [Next.js 14 App Router](https://nextjs.org/docs)
  - 認証 : [Auth.js(NextAuth.js V5)](https://authjs.dev/)
  - CSS : [Tailwind](https://tailwindcss.com/) / [shadcn/ui](https://ui.shadcn.com/) / [Headless UI](https://headlessui.com/)
  - グローバルステート管理 : [zustand](https://zustand-demo.pmnd.rs/)
  - CI/CD : GitHub Actions
  - インフラ環境 : GCP Cloud Run
  - インフラツール : Terraform
+ - エラー/ログ監視 : Sentry / Datadog
 
 ## ❓How To
 <details><summary><b>🏃 Start</b></summary>
