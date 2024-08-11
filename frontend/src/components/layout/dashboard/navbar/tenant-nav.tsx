@@ -18,33 +18,12 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
+import {Tenant} from "@/lib/types";
+import {useState} from "react";
 
-const frameworks = [
-    {
-        value: "next.js",
-        label: "田村大耀",
-    },
-    {
-        value: "sveltekit",
-        label: "SvelteKit",
-    },
-    {
-        value: "nuxt.js",
-        label: "Nuxt.js",
-    },
-    {
-        value: "remix",
-        label: "Remix",
-    },
-    {
-        value: "astro",
-        label: "Astro",
-    },
-]
-
-export default function TenantNav() {
-    const [open, setOpen] = React.useState(false)
-    const [value, setValue] = React.useState("next.js")
+export default function TenantNav({ tenants }: { tenants: Tenant[]; }) {
+    const [open, setOpen] = useState(false);
+    const [tenantId, setTenantId] = useState<string>(tenants[0].id);
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -55,7 +34,7 @@ export default function TenantNav() {
                     aria-expanded={open}
                     className="w-[200px] justify-between"
                 >
-                    {frameworks.find((framework) => framework.value === value)?.label}
+                    {tenants.find((tenant) => tenant.id === tenantId)?.name}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
@@ -65,22 +44,22 @@ export default function TenantNav() {
                     <CommandList>
                         <CommandEmpty>No framework found.</CommandEmpty>
                         <CommandGroup heading="チーム">
-                            {frameworks.map((framework) => (
+                            {tenants.map((tenant) => (
                                 <CommandItem
-                                    key={framework.value}
-                                    value={framework.value}
-                                    onSelect={(currentValue) => {
-                                        setValue(currentValue === value ? "" : currentValue)
+                                    key={tenant.id}
+                                    value={tenant.id}
+                                    onSelect={(currentTenantId) => {
+                                        setTenantId(currentTenantId === tenantId ? "" : currentTenantId)
                                         setOpen(false)
                                     }}
                                 >
                                     <Check
                                         className={cn(
                                             "mr-2 h-4 w-4",
-                                            value === framework.value ? "opacity-100" : "opacity-0"
+                                            tenantId === tenant.id ? "opacity-100" : "opacity-0"
                                         )}
                                     />
-                                    {framework.label}
+                                    {tenant.name}
                                 </CommandItem>
                             ))}
                         </CommandGroup>

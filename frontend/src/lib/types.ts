@@ -15,3 +15,8 @@ export type Tenant = {
     id: string;
     name: string;
 };
+
+export type Project = {
+    id: string;
+    name: string;
+};

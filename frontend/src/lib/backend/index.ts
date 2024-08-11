@@ -2,7 +2,8 @@ import {auth} from "@/lib/auth/auth";
 import {createBackendClient} from "@/lib/backend/create-client";
 import {components} from "@/lib/backend/type";
 import {TokenSet} from "next-auth";
-import {Tenant, User} from "@/lib/types";
+import {Project, Tenant, User} from "@/lib/types";
+import {TAGS} from "@/lib/values";
 
 
 export const postRegisterUser = async (username: string, email: string, password: string) =>  {
@@ -97,8 +98,29 @@ export const getMe = async (token?: string): Promise<User> => {
 }
 
 export const getTenants = async (token?: string): Promise<Tenant[]> => {
-    return [
-        {id: '1', name: 'テナント1'},
-        {id: '2', name: 'テナント2'},
-    ]
+    const {data, error} = await createBackendClient().GET("/tenants/", {
+        headers: { "Authorization": `bearer ${token ? token : (await auth())?.accessToken}` },
+        next: {tags: [TAGS.tenants]},
+        cache: 'no-cache'
+    });
+    if (!data) {
+        throw Error("テナントの取得に失敗しました");
+    }
+    return data.tenants.map((tenant) => {
+        return {id: tenant.id, name: tenant.name};
+    });
+}
+
+export const getProjects = async (tenantId: string, token?: string): Promise<Project[]> => {
+    const {data, error} = await createBackendClient().GET("/tenants/{tenant_id}/projects", {
+        headers: { "Authorization": `bearer ${token ? token : (await auth())?.accessToken}` },
+        params: {path: {tenant_id: tenantId}},
+        cache: 'no-cache'
+    });
+    if (!data) {
+        throw Error("プロジェクトの取得に失敗しました");
+    }
+    return data.projects.map((project) => {
+        return {id: project.id, name: project.name};
+    });
 }

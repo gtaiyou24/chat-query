@@ -160,6 +160,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/tenants/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tenants */
+        get: operations["tenants_tenants__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenants/{tenant_id}/projects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Projects */
+        get: operations["projects_tenants__tenant_id__projects_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/users/me": {
         parameters: {
             query?: never;
@@ -232,6 +266,20 @@ export interface components {
             /** パスワード */
             password: string;
         };
+        /** ProjectJson */
+        ProjectJson: {
+            /** プロジェクトID */
+            id: string;
+            /** テナントID */
+            tenant_id: string;
+            /** プロジェクト名 */
+            name: string;
+        };
+        /** ProjectListJson */
+        ProjectListJson: {
+            /** Projects */
+            projects: components["schemas"]["ProjectJson"][];
+        };
         /** RegisterTenantRequest */
         RegisterTenantRequest: {
             /** ユーザー名 */
@@ -240,6 +288,18 @@ export interface components {
             email_address: string;
             /** パスワード */
             password: string;
+        };
+        /** TenantJson */
+        TenantJson: {
+            /** テナントID */
+            id: string;
+            /** テナント名 */
+            name: string;
+        };
+        /** TenantListJson */
+        TenantListJson: {
+            /** Tenants */
+            tenants: components["schemas"]["TenantJson"][];
         };
         /** TokenJson */
         TokenJson: {
@@ -357,7 +417,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["TokenJson"];
+                    "application/json": unknown;
                 };
             };
             /** @description Validation Error */
@@ -538,6 +598,57 @@ export interface operations {
                 };
                 content: {
                     "application/json": Record<string, never>;
+                };
+            };
+        };
+    };
+    tenants_tenants__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TenantListJson"];
+                };
+            };
+        };
+    };
+    projects_tenants__tenant_id__projects_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenant_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectListJson"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

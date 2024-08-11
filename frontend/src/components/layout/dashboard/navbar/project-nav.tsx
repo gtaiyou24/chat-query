@@ -18,6 +18,8 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
+import {Project} from "@/lib/types";
+import {useState} from "react";
 
 const frameworks = [
     {
@@ -42,9 +44,9 @@ const frameworks = [
     },
 ]
 
-export default function ProjectNav() {
-    const [open, setOpen] = React.useState(false)
-    const [value, setValue] = React.useState("default project")
+export default function ProjectNav({ projects }: { projects: Project[]; }) {
+    const [open, setOpen] = useState(false)
+    const [value, setValue] = useState<string>(projects[0].id);
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -55,7 +57,7 @@ export default function ProjectNav() {
                     aria-expanded={open}
                     className="w-[200px] justify-between"
                 >
-                    {frameworks.find((framework) => framework.value === value)?.label}
+                    {projects.find((project) => project.id === value)?.name}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
@@ -65,10 +67,10 @@ export default function ProjectNav() {
                     <CommandList>
                         <CommandEmpty>No framework found.</CommandEmpty>
                         <CommandGroup heading="プロジェクト">
-                            {frameworks.map((framework) => (
+                            {projects.map((project) => (
                                 <CommandItem
-                                    key={framework.value}
-                                    value={framework.value}
+                                    key={project.id}
+                                    value={project.id}
                                     onSelect={(currentValue) => {
                                         setValue(currentValue === value ? "" : currentValue)
                                         setOpen(false)
@@ -77,10 +79,10 @@ export default function ProjectNav() {
                                     <Check
                                         className={cn(
                                             "mr-2 h-4 w-4",
-                                            value === framework.value ? "opacity-100" : "opacity-0"
+                                            value === project.id ? "opacity-100" : "opacity-0"
                                         )}
                                     />
-                                    {framework.label}
+                                    {project.name}
                                 </CommandItem>
                             ))}
                         </CommandGroup>

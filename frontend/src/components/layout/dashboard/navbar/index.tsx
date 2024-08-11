@@ -1,4 +1,4 @@
-import {UserNav} from "@/components/layout/navbar/user-nav";
+import {UserNav} from "@/components/layout/dashboard/navbar/user-nav";
 import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet";
 import {Button} from "@/components/ui/button";
 import {
@@ -8,18 +8,12 @@ import {
     Package2,
     PanelLeft,
     ShoppingCart,
-    Slash,
     Users2
 } from "lucide-react";
 import Link from "next/link";
-import {
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbList,
-    BreadcrumbSeparator
-} from "@/components/ui/breadcrumb";
-import ProjectNav from "@/components/layout/navbar/project-nav";
-import TenantNav from "@/components/layout/navbar/tenant-nav";
+import ProjectNav from "@/components/layout/dashboard/navbar/project-nav";
+import TenantNav from "@/components/layout/dashboard/navbar/tenant-nav";
+import ActiveProjectNav from "@/components/layout/dashboard/active-project-nav";
 
 export default function Navbar() {
     return (
@@ -93,23 +87,5 @@ function MobileNav() {
                 </nav>
             </SheetContent>
         </Sheet>
-    );
-}
-
-function ActiveProjectNav() {
-    return (
-        <Breadcrumb className="hidden md:block">
-            <BreadcrumbList>
-                <BreadcrumbItem>
-                    <TenantNav />
-                </BreadcrumbItem>
-                <BreadcrumbSeparator>
-                    <Slash  />
-                </BreadcrumbSeparator>
-                <BreadcrumbItem>
-                    <ProjectNav />
-                </BreadcrumbItem>
-            </BreadcrumbList>
-        </Breadcrumb>
     );
 }
