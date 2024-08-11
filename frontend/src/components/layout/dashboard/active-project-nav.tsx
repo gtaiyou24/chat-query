@@ -5,7 +5,7 @@ import ProjectNav from "@/components/layout/dashboard/navbar/project-nav";
 import {getProjects, getTenants} from "@/lib/backend";
 
 
-export default async function ActiveProjectNav({ isGrid = false }: { isGrid: boolean; }) {
+export default async function ActiveProjectNav({ isGrid = false }: { isGrid?: boolean; }) {
     const tenants = await getTenants();
     const projects = await getProjects(tenants[0].id);
     if (isGrid) {
