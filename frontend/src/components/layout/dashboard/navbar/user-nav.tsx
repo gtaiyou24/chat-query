@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { auth, signOut } from '@/lib/auth/auth';
+import { auth, signOut } from '@/lib/auth';
 import {
     DropdownMenu,
     DropdownMenuContent,

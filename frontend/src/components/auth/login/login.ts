@@ -2,7 +2,7 @@
 
 import {z} from "zod";
 import {LoginSchema} from "@/components/auth/login/login-schema";
-import {signIn} from "@/lib/auth/auth";
+import {signIn} from "@/lib/auth";
 import {DEFAULT_LOGIN_REDIRECT} from "@/route";
 import {AuthError} from "next-auth";
 

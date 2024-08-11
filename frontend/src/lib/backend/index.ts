@@ -1,4 +1,4 @@
-import {auth} from "@/lib/auth/auth";
+import {auth} from "@/lib/auth";
 import {createBackendClient} from "@/lib/backend/create-client";
 import {components} from "@/lib/backend/type";
 import {TokenSet} from "next-auth";
