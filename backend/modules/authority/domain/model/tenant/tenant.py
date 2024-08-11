@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from modules.authority.domain.model.tenant import TenantId, Invitation
 from modules.authority.domain.model.tenant.member import Member
 from modules.authority.domain.model.tenant.project import Project, ProjectId
-from modules.authority.domain.model.user import EmailAddress, User
+from modules.authority.domain.model.user import EmailAddress, User, UserId
 
 
 @dataclass(init=True, eq=False)
@@ -44,3 +44,10 @@ class Tenant:
     def withdraw_invitation(self, code: str) -> None:
         """招待状を破棄する"""
         self.invitations = set([e for e in self.invitations if e.code != code])
+
+    def has_member(self, user_id: UserId) -> bool:
+        """該当ユーザーがテナントに属しているか判定できる"""
+        for member in self.members:
+            if member.user_id == user_id:
+                return True
+        return False

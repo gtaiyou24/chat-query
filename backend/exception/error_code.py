@@ -38,6 +38,7 @@ class ErrorCode(Enum):
     USER_IS_NOT_VERIFIED = ("該当ユーザーの認証が完了していません。", ErrorLevel.WARN, HTTPStatus.FORBIDDEN)
     VALID_TOKEN_DOES_NOT_EXISTS = (
         "トークンが見つからない、もしくはすでに有効期限を過ぎています", ErrorLevel.ERROR, HTTPStatus.BAD_REQUEST)
+    TENANT_DOES_NOT_FOUND = ("テナントが見つかりません。", ErrorLevel.ERROR, HTTPStatus.NOT_FOUND)
 
     def __init__(self, message: str, error_level: ErrorLevel, http_status: HTTPStatus):
         self.message = message

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from injector import singleton, inject
 
+from modules.authority.domain.model.tenant import TenantId
 from modules.authority.domain.model.tenant.project import Project, ProjectId
 from port.adapter.persistence.repository.mysql.project import DriverManagerProject
 
@@ -29,6 +30,9 @@ class CacheLayerProject:
 
     def caches_or_origins(self, *project_id: ProjectId) -> list[Project] | None:
         return self.__driver_manager_project.find_by_id(*project_id)
+
+    def caches_or_origins_with_tenant_id(self, tenant_id: TenantId) -> list[Project]:
+        return self.__driver_manager_project.find_all_by(tenant_id=tenant_id.value)
 
     def set(self, project: Project) -> None:
         self.__driver_manager_project.upsert(project)

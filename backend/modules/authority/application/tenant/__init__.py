@@ -1,0 +1,1 @@
+from .tenant_application_service import TenantApplicationService
