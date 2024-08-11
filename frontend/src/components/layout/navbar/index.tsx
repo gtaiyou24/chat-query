@@ -20,13 +20,12 @@ import {
 } from "@/components/ui/breadcrumb";
 import ProjectNav from "@/components/layout/navbar/project-nav";
 import TenantNav from "@/components/layout/navbar/tenant-nav";
-import ThemeToggle from "@/components/layout/navbar/theme-toggle";
 
 export default function Navbar() {
     return (
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
             <MobileNav />
-            <TenantProjectSelector />
+            <ActiveProjectNav />
             <UserNav />
         </header>
     );
@@ -97,7 +96,7 @@ function MobileNav() {
     );
 }
 
-function TenantProjectSelector() {
+function ActiveProjectNav() {
     return (
         <Breadcrumb className="hidden md:block">
             <BreadcrumbList>

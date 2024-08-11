@@ -1,5 +1,22 @@
 # Analytics GPT
 
+**Backend**
+
+ - Language : Python
+ - Framework : FastAPI
+ - DataBase : MySQL / Redis
+ - Infra : GCP Cloud Run / [Neon](https://neon.tech/) / [Upstash](https://upstash.com/)
+ - CI/CD : GitHub Actions
+
+**Frontend**
+
+ - Language : TypeScript
+ - Framework : Next.js 14 App Router
+ - Auth : [Auth.js(NextAuth.js V5)](https://authjs.dev/)
+ - CSS : [Tailwind](https://tailwindcss.com/) / [shadcn/ui](https://ui.shadcn.com/) / [Headless UI](https://headlessui.com/)
+ - Global State : [zustand](https://zustand-demo.pmnd.rs/)
+ - CI/CD : GitHub Actions
+
 ## 🛠️How To
 ### 🏃Start
 
@@ -19,7 +36,7 @@ docker-compose up --build
  - [Swagger UI](http://localhost:8000/docs)
  - [MailHog](http://0.0.0.0:8025/)
 
-**Appendix**
+### 🔌Connect to DB
 
 Connect to Redis
 ```bash
