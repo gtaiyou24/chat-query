@@ -1,6 +1,6 @@
 "use server";
 
-import {postVerifyEmail} from "@/lib/backend";
+import {postVerifyEmail} from "../../../lib/api";
 
 export const newVerification = async (token: string): Promise<{success?: string; error?: string;}> => {
     try {

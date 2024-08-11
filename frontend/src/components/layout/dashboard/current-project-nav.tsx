@@ -2,7 +2,7 @@ import {Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbSeparator} from "@
 import TenantNav from "@/components/layout/dashboard/navbar/tenant-nav";
 import {Slash} from "lucide-react";
 import ProjectNav from "@/components/layout/dashboard/navbar/project-nav";
-import {getProjects, getTenants} from "@/lib/backend";
+import {getProjects, getTenants} from "../../../lib/api";
 
 
 export default async function CurrentProjectNav({ isGrid = false }: { isGrid?: boolean; }) {

@@ -6,7 +6,7 @@ import {RequestCookies} from "next/dist/compiled/@edge-runtime/cookies";
 import {ApiError} from "next/dist/server/api-utils";
 import {apiAuthPrefix, authRoutes, DEFAULT_LOGIN_REDIRECT, publicRoutes} from "@/route";
 import {BASE_URL} from "@/lib/constants";
-import {putAuthToken} from "@/lib/backend";
+import {putAuthToken} from "@/lib/api";
 
 async function refreshAccessToken(token: JWT): Promise<JWT> {
     return putAuthToken(token.refreshToken)

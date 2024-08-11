@@ -1,7 +1,7 @@
 import createClient from "openapi-fetch";
-import {paths} from "@/lib/backend/type";
+import {paths} from "@/lib/api/type";
 
 
-export const createBackendClient = () => {
+export const createApiClient = () => {
     return createClient<paths>({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL! })
 }

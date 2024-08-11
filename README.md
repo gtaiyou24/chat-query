@@ -59,17 +59,11 @@ mysql -h 127.0.0.1 -P 3306 -u user -p
 
 </details>
 
-<details><summary><b>🛠️ Generate Typescript types from OpenAPI</b></summary>
+<details><summary><b>🛠️ Generate client code types from OpenAPI</b></summary>
 
 ```bash
 cd frontend
-npm i openapi-fetch
-npm i -D openapi-typescript typescript
-```
-
-```bash
-# at /frontend
-npx openapi-typescript http://localhost:8000/openapi.json -o ./src/lib/backend/type.ts
+npm run generate-client
 ```
 
 Appendix

@@ -1,7 +1,7 @@
 import type {NextAuthConfig, User} from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import {apiAuthPrefix, authRoutes, DEFAULT_LOGIN_REDIRECT, publicRoutes} from "@/route";
-import {getMe, logout, postAuthToken} from "../backend";
+import {getMe, logout, postAuthToken} from "../api";
 
 export default {
     providers: [

@@ -2,7 +2,7 @@
 
 import Schema from "@/components/auth/register/schema";
 import {z} from "zod";
-import {postRegisterUser} from "@/lib/backend";
+import {postRegisterUser} from "../../../lib/api";
 
 export const register = async (values: z.infer<typeof Schema>) => {
     const validatedFields = Schema.safeParse(values);

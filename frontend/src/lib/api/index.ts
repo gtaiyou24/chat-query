@@ -1,13 +1,13 @@
 import {auth} from "@/lib/auth";
-import {createBackendClient} from "@/lib/backend/create-client";
-import {components} from "@/lib/backend/type";
+import {createApiClient} from "@/lib/api/create-client";
+import {components} from "@/lib/api/type";
 import {TokenSet} from "next-auth";
 import {Project, Tenant, User} from "@/lib/types";
 import {TAGS} from "@/lib/constants";
 
 
 export const postRegisterUser = async (username: string, email: string, password: string) =>  {
-    const {error} = await createBackendClient().POST("/auth/register", {
+    const {error} = await createApiClient().POST("/auth/register", {
         cache: "no-cache",
         body: {
             username: username,
@@ -22,7 +22,7 @@ export const postRegisterUser = async (username: string, email: string, password
 }
 
 export const postVerifyEmail = async (token: string): Promise<TokenSet> => {
-    const { data, error } = await createBackendClient().POST("/auth/verify-email/{token}", {
+    const { data, error } = await createApiClient().POST("/auth/verify-email/{token}", {
         headers: { 'Content-Type': 'application/json' },
         params: { path: { token: token } },
     })
@@ -33,7 +33,7 @@ export const postVerifyEmail = async (token: string): Promise<TokenSet> => {
 }
 
 export const postAuthToken = async (email: string, password: string): Promise<TokenSet>=> {
-    const {data, error} = await createBackendClient().POST("/auth/token", {
+    const {data, error} = await createApiClient().POST("/auth/token", {
         cache: "no-cache",
         body: {
             email_address: email,
@@ -54,7 +54,7 @@ export const postAuthToken = async (email: string, password: string): Promise<To
 }
 
 export const putAuthToken = async (token?: string): Promise<TokenSet> => {
-    const {data, error} = await createBackendClient().PUT("/auth/token", {
+    const {data, error} = await createApiClient().PUT("/auth/token", {
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json",
@@ -69,7 +69,7 @@ export const putAuthToken = async (token?: string): Promise<TokenSet> => {
 };
 
 export const logout = async (token?: string) => {
-    const { error } = await createBackendClient().DELETE("/auth/token", {
+    const { error } = await createApiClient().DELETE("/auth/token", {
         headers: { "Authorization": `bearer ${token ? token : (await auth())?.accessToken}` },
         cache: 'no-cache'
     });
@@ -80,7 +80,7 @@ export const logout = async (token?: string) => {
 
 
 export const getMe = async (token?: string): Promise<User> => {
-    const { data, error } = await createBackendClient().GET("/users/me", {
+    const { data, error } = await createApiClient().GET("/users/me", {
         headers: { "Authorization": `bearer ${token ? token : (await auth())?.accessToken}` },
         cache: 'no-cache'
     });
@@ -98,7 +98,7 @@ export const getMe = async (token?: string): Promise<User> => {
 }
 
 export const getTenants = async (token?: string): Promise<Tenant[]> => {
-    const {data, error} = await createBackendClient().GET("/tenants/", {
+    const {data, error} = await createApiClient().GET("/tenants/", {
         headers: { "Authorization": `bearer ${token ? token : (await auth())?.accessToken}` },
         next: {tags: [TAGS.tenants]},
         cache: 'no-cache'
@@ -112,7 +112,7 @@ export const getTenants = async (token?: string): Promise<Tenant[]> => {
 }
 
 export const getProjects = async (tenantId: string, token?: string): Promise<Project[]> => {
-    const {data, error} = await createBackendClient().GET("/tenants/{tenant_id}/projects", {
+    const {data, error} = await createApiClient().GET("/tenants/{tenant_id}/projects", {
         headers: { "Authorization": `bearer ${token ? token : (await auth())?.accessToken}` },
         params: {path: {tenant_id: tenantId}},
         cache: 'no-cache'
