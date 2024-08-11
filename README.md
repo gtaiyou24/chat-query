@@ -3,20 +3,23 @@
 ## 🛠Technology
 ### 🔨Backend
 
- - Language : Python
- - Framework : FastAPI
- - DataBase : MySQL / Redis
- - Infra : GCP Cloud Run / [Neon](https://neon.tech/) / [Upstash](https://upstash.com/)
+ - 開発言語 : Python
+ - フレームワーク : FastAPI
+ - DB : MySQL / Redis
+ - インフラ環境 : GCP Cloud Run / [Neon](https://neon.tech/) / [Upstash](https://upstash.com/)
  - CI/CD : GitHub Actions
+ - インフラツール : Terraform
 
 ### 🔧Frontend
 
- - Language : TypeScript
- - Framework : Next.js 14 App Router
- - Auth : [Auth.js(NextAuth.js V5)](https://authjs.dev/)
+ - 開発言語 : TypeScript
+ - フレームワーク : Next.js 14 App Router
+ - 認証 : [Auth.js(NextAuth.js V5)](https://authjs.dev/)
  - CSS : [Tailwind](https://tailwindcss.com/) / [shadcn/ui](https://ui.shadcn.com/) / [Headless UI](https://headlessui.com/)
- - Global State : [zustand](https://zustand-demo.pmnd.rs/)
+ - グローバルステート管理 : [zustand](https://zustand-demo.pmnd.rs/)
  - CI/CD : GitHub Actions
+ - インフラ環境 : GCP Cloud Run
+ - インフラツール : Terraform
 
 ## ❓How To
 <details><summary><b>🏃 Start</b></summary>
