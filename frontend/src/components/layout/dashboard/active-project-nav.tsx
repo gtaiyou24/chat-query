@@ -5,9 +5,17 @@ import ProjectNav from "@/components/layout/dashboard/navbar/project-nav";
 import {getProjects, getTenants} from "@/lib/backend";
 
 
-export default async function ActiveProjectNav() {
+export default async function ActiveProjectNav({ isGrid = false }: { isGrid: boolean; }) {
     const tenants = await getTenants();
     const projects = await getProjects(tenants[0].id);
+    if (isGrid) {
+        return (
+            <div className="grid gap-2">
+                <TenantNav tenants={tenants} />
+                <ProjectNav projects={projects} />
+            </div>
+        );
+    }
     return (
         <Breadcrumb className="hidden md:block">
             <BreadcrumbList>

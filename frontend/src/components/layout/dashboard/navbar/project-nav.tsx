@@ -21,29 +21,6 @@ import {
 import {Project} from "@/lib/types";
 import {useState} from "react";
 
-const frameworks = [
-    {
-        value: "default project",
-        label: "Default Project",
-    },
-    {
-        value: "sveltekit",
-        label: "SvelteKit",
-    },
-    {
-        value: "nuxt.js",
-        label: "Nuxt.js",
-    },
-    {
-        value: "remix",
-        label: "Remix",
-    },
-    {
-        value: "astro",
-        label: "Astro",
-    },
-]
-
 export default function ProjectNav({ projects }: { projects: Project[]; }) {
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState<string>(projects[0].id);
