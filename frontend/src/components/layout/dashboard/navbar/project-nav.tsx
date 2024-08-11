@@ -20,10 +20,12 @@ import {
 } from "@/components/ui/popover"
 import {Project} from "@/lib/types";
 import {useState} from "react";
+import {useCurrentProjectStore} from "@/store";
 
 export default function ProjectNav({ projects }: { projects: Project[]; }) {
+    const { projectId, setProjectId } = useCurrentProjectStore();
+    if (!projectId) setProjectId(projects[0].id);
     const [open, setOpen] = useState(false)
-    const [value, setValue] = useState<string>(projects[0].id);
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -34,7 +36,7 @@ export default function ProjectNav({ projects }: { projects: Project[]; }) {
                     aria-expanded={open}
                     className="w-[200px] justify-between"
                 >
-                    {projects.find((project) => project.id === value)?.name}
+                    {projects.find((project) => project.id === projectId)?.name}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
@@ -42,21 +44,21 @@ export default function ProjectNav({ projects }: { projects: Project[]; }) {
                 <Command>
                     <CommandInput placeholder="プロジェクトを検索..." />
                     <CommandList>
-                        <CommandEmpty>No framework found.</CommandEmpty>
+                        <CommandEmpty>プロジェクトが見つかりません</CommandEmpty>
                         <CommandGroup heading="プロジェクト">
                             {projects.map((project) => (
                                 <CommandItem
                                     key={project.id}
                                     value={project.id}
                                     onSelect={(currentValue) => {
-                                        setValue(currentValue === value ? "" : currentValue)
+                                        setProjectId(currentValue)
                                         setOpen(false)
                                     }}
                                 >
                                     <Check
                                         className={cn(
                                             "mr-2 h-4 w-4",
-                                            value === project.id ? "opacity-100" : "opacity-0"
+                                            projectId === project.id ? "opacity-100" : "opacity-0"
                                         )}
                                     />
                                     {project.name}

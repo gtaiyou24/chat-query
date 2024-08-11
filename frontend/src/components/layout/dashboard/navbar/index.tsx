@@ -11,13 +11,13 @@ import {
     Users2
 } from "lucide-react";
 import Link from "next/link";
-import ActiveProjectNav from "@/components/layout/dashboard/active-project-nav";
+import CurrentProjectNav from "@/components/layout/dashboard/current-project-nav";
 
 export default function Navbar() {
     return (
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
             <MobileNav />
-            <ActiveProjectNav />
+            <CurrentProjectNav />
             <UserNav />
         </header>
     );
@@ -42,7 +42,7 @@ function MobileNav() {
                         <span className="sr-only">Vercel</span>
                     </Link>
 
-                    <ActiveProjectNav isGrid={true} />
+                    <CurrentProjectNav isGrid={true} />
 
                     <Link
                         href="#"

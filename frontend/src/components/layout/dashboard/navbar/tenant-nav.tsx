@@ -20,10 +20,12 @@ import {
 } from "@/components/ui/popover"
 import {Tenant} from "@/lib/types";
 import {useState} from "react";
+import {useCurrentProjectStore} from "@/store";
 
 export default function TenantNav({ tenants }: { tenants: Tenant[]; }) {
+    const { tenantId, setTenantId } = useCurrentProjectStore();
+    if (!tenantId) setTenantId(tenants[0].id);
     const [open, setOpen] = useState(false);
-    const [tenantId, setTenantId] = useState<string>(tenants[0].id);
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -49,7 +51,7 @@ export default function TenantNav({ tenants }: { tenants: Tenant[]; }) {
                                     key={tenant.id}
                                     value={tenant.id}
                                     onSelect={(currentTenantId) => {
-                                        setTenantId(currentTenantId === tenantId ? "" : currentTenantId)
+                                        setTenantId(currentTenantId)
                                         setOpen(false)
                                     }}
                                 >
