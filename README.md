@@ -1,6 +1,7 @@
 # Analytics GPT
 
-**Backend**
+## 🛠Technology
+### 🔨Backend
 
  - Language : Python
  - Framework : FastAPI
@@ -8,7 +9,7 @@
  - Infra : GCP Cloud Run / [Neon](https://neon.tech/) / [Upstash](https://upstash.com/)
  - CI/CD : GitHub Actions
 
-**Frontend**
+### 🔧Frontend
 
  - Language : TypeScript
  - Framework : Next.js 14 App Router
@@ -17,8 +18,8 @@
  - Global State : [zustand](https://zustand-demo.pmnd.rs/)
  - CI/CD : GitHub Actions
 
-## 🛠️How To
-### 🏃Start
+## ❓How To
+<details><summary><b>🏃 Start</b></summary>
 
 **Step.1**<br/>
 Create a `.env` file at `./backend` folder.
@@ -36,7 +37,9 @@ docker-compose up --build
  - [Swagger UI](http://localhost:8000/docs)
  - [MailHog](http://0.0.0.0:8025/)
 
-### 🔌Connect to DB
+</details>
+
+<details><summary><b>🔌 Connect to local DB</b></summary>
 
 Connect to Redis
 ```bash
@@ -49,7 +52,9 @@ mysql -h 127.0.0.1 -P 3306 -u user -p
 # Enter password: pass
 ```
 
-### 🛠️ Generate Typescript types from OpenAPI
+</details>
+
+<details><summary><b>🛠️ Generate Typescript types from OpenAPI</b></summary>
 
 ```bash
 cd frontend
@@ -65,9 +70,13 @@ Appendix
 
  - [openapi-typescript | OpenAPI TypeScript](https://openapi-ts.pages.dev/introduction)
 
-### ✅ Test
+</details>
+
+<details><summary><b>✅ Test</b></summary>
 
 ```bash
 pip install pytest pytest-env httpx
 pytest -v ./test
 ```
+
+</details>
