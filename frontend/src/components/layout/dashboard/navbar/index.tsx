@@ -1,17 +1,12 @@
 import {UserNav} from "@/components/layout/dashboard/navbar/user-nav";
 import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet";
 import {Button} from "@/components/ui/button";
-import {
-    Home,
-    LineChart,
-    Package,
-    Package2,
-    PanelLeft,
-    ShoppingCart,
-    Users2
-} from "lucide-react";
+import {　Package2, PanelLeft, Settings　} from "lucide-react";
 import Link from "next/link";
 import CurrentProjectNav from "@/components/layout/dashboard/current-project-nav";
+import {APP_NAME, navItems} from "@/lib/constants";
+import {Icons} from "@/components/icons";
+import Logo from "@/components/logo";
 
 export default function Navbar() {
     return (
@@ -35,49 +30,35 @@ function MobileNav() {
             <SheetContent side="left" className="sm:max-w-xs">
                 <nav className="grid gap-6 text-lg font-medium">
                     <Link
-                        href="#"
+                        href="/dashboard"
                         className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
                     >
-                        <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
-                        <span className="sr-only">Vercel</span>
+                        <Logo width={40} height={40} className="transition-all group-hover:scale-110" />
+                        <span className="sr-only">{APP_NAME}</span>
                     </Link>
 
                     <CurrentProjectNav isGrid={true} />
 
+                    {navItems.map((item, index) => {
+                        const Icon = Icons[item.icon];
+                        return (
+                            <Link
+                                key={index}
+                                href={item.href}
+                                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                            >
+                                <Icon className="h-5 w-5" />
+                                {item.label}
+                            </Link>
+                        );
+                    })}
+
                     <Link
                         href="#"
                         className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                     >
-                        <Home className="h-5 w-5" />
-                        Dashboard
-                    </Link>
-                    <Link
-                        href="#"
-                        className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                    >
-                        <ShoppingCart className="h-5 w-5" />
-                        Orders
-                    </Link>
-                    <Link
-                        href="#"
-                        className="flex items-center gap-4 px-2.5 text-foreground"
-                    >
-                        <Package className="h-5 w-5" />
-                        Products
-                    </Link>
-                    <Link
-                        href="#"
-                        className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                    >
-                        <Users2 className="h-5 w-5" />
-                        Customers
-                    </Link>
-                    <Link
-                        href="#"
-                        className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                    >
-                        <LineChart className="h-5 w-5" />
-                        Settings
+                        <Settings className="h-5 w-5" />
+                        設定
                     </Link>
                 </nav>
             </SheetContent>

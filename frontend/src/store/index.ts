@@ -1,6 +1,6 @@
 import {create} from "zustand";
 import {persist} from "zustand/middleware";
-import {STORAGES} from "@/lib/values";
+import {STORAGES} from "@/lib/constants";
 
 
 type ProjectStore = {

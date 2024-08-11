@@ -3,7 +3,7 @@ import {createBackendClient} from "@/lib/backend/create-client";
 import {components} from "@/lib/backend/type";
 import {TokenSet} from "next-auth";
 import {Project, Tenant, User} from "@/lib/types";
-import {TAGS} from "@/lib/values";
+import {TAGS} from "@/lib/constants";
 
 
 export const postRegisterUser = async (username: string, email: string, password: string) =>  {
