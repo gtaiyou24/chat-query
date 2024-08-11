@@ -5,7 +5,7 @@ from modules.authority.application.identity.dpo import UserDpo
 from modules.authority.application.tenant import TenantApplicationService
 from port.adapter.resource import APIResource
 from port.adapter.resource.dependency import get_current_active_user
-from port.adapter.resource.tenant.response import TenantListJson, ProjectListJson
+from port.adapter.resource.tenant.response import TenantListJson, ProjectListJson, TenantJson, ProjectJson
 
 
 class TenantResource(APIResource):
@@ -14,8 +14,11 @@ class TenantResource(APIResource):
     def __init__(self):
         self.__tenant_application_service = None
         self.router.add_api_route("/", self.tenants, methods=["GET"], response_model=TenantListJson)
-        self.router.add_api_route(
-            "/{tenant_id}/projects", self.projects, methods=["GET"], response_model=ProjectListJson)
+        self.router.add_api_route("/", self.create_new_tenant, methods=["POST"], response_model=TenantJson)
+        self.router.add_api_route("/{tenant_id}/projects", self.projects, methods=["GET"],
+                                  response_model=ProjectListJson)
+        self.router.add_api_route("/{tenant_id}/projects", self.create_new_project, methods=["POST"],
+                                  response_model=ProjectJson)
 
     @property
     def tenant_application_service(self) -> TenantApplicationService:
@@ -28,6 +31,12 @@ class TenantResource(APIResource):
         dpo = self.tenant_application_service.tenants(current_user_dpo.user.id.value)
         return TenantListJson.from_(dpo)
 
+    def create_new_tenant(self, current_user_dpo: UserDpo = Depends(get_current_active_user)) -> TenantJson:
+        pass
+
     def projects(self, tenant_id: str, current_user_dpo: UserDpo = Depends(get_current_active_user)) -> ProjectListJson:
         dpo = self.tenant_application_service.projects(current_user_dpo.user.id.value, tenant_id)
         return ProjectListJson.from_(dpo)
+
+    def create_new_project(self, tenant_id: str, current_user_dpo: UserDpo = Depends(get_current_active_user)) -> ProjectJson:
+        pass
