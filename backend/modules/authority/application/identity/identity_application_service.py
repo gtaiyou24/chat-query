@@ -67,7 +67,7 @@ class IdentityApplicationService:
         tenant.register_admin_member(user)
         # プロジェクトを作成
         project_id = self.project_repository.next_identity()
-        project = tenant.create_project(project_id, 'no project')
+        project = tenant.create_project(project_id, 'Default Project')
 
         self.user_repository.add(user)
         self.tenant_repository.add(tenant)
