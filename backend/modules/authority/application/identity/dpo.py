@@ -19,3 +19,9 @@ class SessionDpo:
 class UserDpo:
     user: User
     tenants: list[Tenant]
+
+    def has_tenant(self, tenant_id: str) -> bool:
+        for e in self.tenants:
+            if e.id.value == tenant_id:
+                return True
+        return False

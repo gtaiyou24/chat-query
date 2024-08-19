@@ -1,0 +1,1 @@
+from .member_application_service import MemberApplicationService
