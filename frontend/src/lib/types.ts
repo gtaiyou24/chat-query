@@ -39,6 +39,20 @@ export interface Dataset {
     dataSource: Row[];
 }
 
+export type DSItem =
+    | {
+        key: string;
+        name: string;
+        url: string;
+        type: "demo";
+      }
+    | {
+        key: string;
+        name: string;
+        dataset: Dataset;
+        type: "custom";
+    };
+
 
 export interface ChatMessage {
     role: "user" | "assistant" | "system";

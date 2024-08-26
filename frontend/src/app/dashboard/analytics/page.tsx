@@ -1,13 +1,4 @@
-import {Button} from "@/components/ui/button";
-import Chat from "@/components/analytics/chat";
-
-const AnalyticsMenu = () => {
-    return (
-        <div className="flex items-end my-2">
-            <Button>CSVデータをアップロード</Button>
-        </div>
-    );
-}
+import Chat from "@/components/chat/chat";
 
 
 export default function AnalyticsPage() {
@@ -21,9 +12,6 @@ export default function AnalyticsPage() {
             <p className="text-center my-2">
                 表形式のデータセットからチャットインターフェイスを使ってコンテキストに沿ったデータの可視化を行います。
             </p>
-
-            <AnalyticsMenu />
-
             <Chat />
         </div>
     );
