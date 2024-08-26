@@ -1,5 +1,3 @@
-"use server";
-
 import {ChatMessage, ChatResponse, Field} from "@/lib/types";
 
 export default async function chatCompletion(
@@ -10,8 +8,8 @@ export default async function chatCompletion(
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-            messages,
-            metas
+            messages: messages,
+            metas: metas
         }),
     });
     const result = (await res.json()) as {

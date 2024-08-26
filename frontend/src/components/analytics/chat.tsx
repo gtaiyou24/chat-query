@@ -5,6 +5,7 @@ import ChatMessages from "@/components/analytics/chat-messages";
 import {useState} from "react";
 import {ChatMessage, Field} from "@/lib/types";
 import chatCompletion from "@/components/analytics/chat-completion";
+import {toast} from "sonner";
 
 
 export default function Chat() {
@@ -16,7 +17,9 @@ export default function Chat() {
             .then((res) => {
                 setChatMessages([...chatMessages, lastMessage, res.choices[0].message])
             })
-            .catch((err) => {})
+            .catch((err) => {
+                toast(err.message);
+            })
     };
     const onClear = () => setChatMessages([]);
 
