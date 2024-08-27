@@ -12,4 +12,8 @@ export const columns: ColumnDef<Member>[] = [
         accessorKey: "username",
         header: "ユーザー名",
     },
+    {
+        accessorKey: "role",
+        header: "ロール",
+    }
 ]

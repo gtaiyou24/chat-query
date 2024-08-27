@@ -2,7 +2,7 @@ import {auth} from "@/lib/auth";
 import {createApiClient} from "@/lib/api/create-client";
 import {components} from "@/lib/api/type";
 import {TokenSet} from "next-auth";
-import {Project, Tenant, User} from "@/lib/types";
+import {Member, Project, Tenant, User} from "@/lib/types";
 import {TAGS} from "@/lib/constants";
 
 
@@ -122,5 +122,24 @@ export const getProjects = async (tenantId: string, token?: string): Promise<Pro
     }
     return data.projects.map((project) => {
         return {id: project.id, name: project.name};
+    });
+}
+
+export const getMembers = async (tenantId: string, token?: string): Promise<Member[]> => {
+    const {data, error} = await createApiClient().GET("/tenants/{tenant_id}/members", {
+        headers: { "Authorization": `bearer ${token ? token : (await auth())?.accessToken}` },
+        params: {path: {tenant_id: tenantId}},
+        cache: 'no-cache'
+    });
+    if (!data) {
+        throw Error("プロジェクトの取得に失敗しました");
+    }
+    return data.members.map((member): Member => {
+        return {
+            userId: member.user_id,
+            username: member.username,
+            email: member.email_address,
+            role: member.role.toLowerCase() as "admin" | "editor" | "reader"
+        };
     });
 }

@@ -22,9 +22,10 @@ export type Project = {
 };
 
 export type Member = {
-    id: string;
+    userId: string;
     email: string;
     username: string;
+    role: 'admin' | 'editor' | 'reader';
 };
 
 

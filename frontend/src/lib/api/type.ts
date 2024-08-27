@@ -170,7 +170,8 @@ export interface paths {
         /** Tenants */
         get: operations["tenants_tenants__get"];
         put?: never;
-        post?: never;
+        /** Create New Tenant */
+        post: operations["create_new_tenant_tenants__post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -187,8 +188,78 @@ export interface paths {
         /** Projects */
         get: operations["projects_tenants__tenant_id__projects_get"];
         put?: never;
+        /** Create New Project */
+        post: operations["create_new_project_tenants__tenant_id__projects_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenants/{tenant_id}/members": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Members */
+        get: operations["members_tenants__tenant_id__members_get"];
+        put?: never;
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenants/{tenant_id}/members/invite": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Invite */
+        post: operations["invite_tenants__tenant_id__members_invite_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenants/{tenant_id}/members/join": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Join */
+        post: operations["join_tenants__tenant_id__members_join_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenants/{tenant_id}/members/{member_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Change */
+        put: operations["change_tenants__tenant_id__members__member_id__put"];
+        post?: never;
+        /** Remove */
+        delete: operations["remove_tenants__tenant_id__members__member_id__delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -221,6 +292,13 @@ export interface components {
             provider: string;
             /** プロバイダーアカウントID */
             provider_account_id: string;
+        };
+        /** ChangeRoleRequest */
+        ChangeRoleRequest: {
+            /** メンバーID */
+            member_id: string;
+            /** 新しいロール */
+            new_role: components["schemas"]["Role"];
         };
         /** ErrorJson */
         ErrorJson: {
@@ -259,6 +337,32 @@ export interface components {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
         };
+        /** InviteMemberRequest */
+        InviteMemberRequest: {
+            /** メールアドレス */
+            email_address: string;
+            /** ロール */
+            role: components["schemas"]["Role"];
+        };
+        /** MemberJson */
+        MemberJson: {
+            /** ユーザーID */
+            user_id: string;
+            /** ユーザー名 */
+            username: string;
+            /** メールアドレス */
+            email_address: string;
+            /**
+             * ロール
+             * @enum {string}
+             */
+            role: "ADMIN" | "EDITOR" | "READER";
+        };
+        /** MemberListJson */
+        MemberListJson: {
+            /** メンバー一覧 */
+            members: components["schemas"]["MemberJson"][];
+        };
         /** OAuth2PasswordRequest */
         OAuth2PasswordRequest: {
             /** メールアドレス */
@@ -289,6 +393,11 @@ export interface components {
             /** パスワード */
             password: string;
         };
+        /**
+         * Role
+         * @enum {string}
+         */
+        Role: "admin" | "editor" | "reader";
         /** TenantJson */
         TenantJson: {
             /** テナントID */
@@ -622,6 +731,26 @@ export interface operations {
             };
         };
     };
+    create_new_tenant_tenants__post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TenantJson"];
+                };
+            };
+        };
+    };
     projects_tenants__tenant_id__projects_get: {
         parameters: {
             query?: never;
@@ -640,6 +769,202 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ProjectListJson"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_new_project_tenants__tenant_id__projects_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenant_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectJson"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    members_tenants__tenant_id__members_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenant_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemberListJson"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    invite_tenants__tenant_id__members_invite_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenant_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InviteMemberRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    join_tenants__tenant_id__members_join_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenant_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    change_tenants__tenant_id__members__member_id__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenant_id: string;
+                member_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChangeRoleRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemberJson"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    remove_tenants__tenant_id__members__member_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenant_id: string;
+                member_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemberListJson"];
                 };
             };
             /** @description Validation Error */
