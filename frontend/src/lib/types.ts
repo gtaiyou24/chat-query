@@ -21,6 +21,12 @@ export type Project = {
     name: string;
 };
 
+export type Member = {
+    id: string;
+    email: string;
+    username: string;
+};
+
 
 export type SemanticType = 'quantitative' | 'nominal' | 'ordinal' | 'temporal';
 
