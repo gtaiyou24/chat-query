@@ -23,6 +23,10 @@ class Tenant:
             return False
         return self.id == other.id
 
+    @property
+    def member_user_ids(self) -> list[UserId]:
+        return [member.user_id for member in self.members]
+
     @staticmethod
     def provision(id: TenantId, name: str) -> Tenant:
         return Tenant(id, name, set(), set())

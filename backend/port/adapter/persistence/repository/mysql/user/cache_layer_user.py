@@ -28,7 +28,7 @@ class CacheLayerUser:
         self.values[key] = optional
         return self.values[key]
 
-    def users_or_origins(self, *user_id: UserId) -> list[User] | None:
+    def users_or_origins(self, *user_id: UserId) -> set[User] | None:
         return self.__driver_manager_user.find_by_ids(*user_id)
 
     def user_or_origin_with_email_address(self, email_address: EmailAddress) -> User | None:

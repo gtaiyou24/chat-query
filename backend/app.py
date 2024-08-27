@@ -28,6 +28,7 @@ from port.adapter.persistence.repository.mysql.tenant import MySQLTenantReposito
 from port.adapter.persistence.repository.mysql.user import MySQLUserRepository
 from port.adapter.resource.auth import AuthResource
 from port.adapter.resource.health import HealthResource
+from port.adapter.resource.tenant.member import MemberResource
 from port.adapter.resource.tenant.tenant_resource import TenantResource
 from port.adapter.resource.user import UserResource
 from port.adapter.service.mail import SendMailServiceImpl
@@ -81,6 +82,7 @@ app.add_middleware(
 app.include_router(AuthResource().router)
 app.include_router(HealthResource().router)
 app.include_router(TenantResource().router)
+app.include_router(MemberResource().router)
 app.include_router(UserResource().router)
 
 

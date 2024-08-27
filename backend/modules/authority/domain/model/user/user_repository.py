@@ -24,7 +24,7 @@ class UserRepository(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def users_with_ids(self, *user_id: UserId) -> list[User]:
+    def users_with_ids(self, *user_id: UserId) -> set[User]:
         pass
 
     @abc.abstractmethod

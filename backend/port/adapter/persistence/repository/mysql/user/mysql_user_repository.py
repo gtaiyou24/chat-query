@@ -27,7 +27,7 @@ class MySQLUserRepository(UserRepository):
         return self.__cache_layer_user.user_or_origin(user_id)
 
     @override
-    def users_with_ids(self, *user_id: UserId) -> list[User]:
+    def users_with_ids(self, *user_id: UserId) -> set[User]:
         return self.__cache_layer_user.users_or_origins(*user_id)
 
     @override

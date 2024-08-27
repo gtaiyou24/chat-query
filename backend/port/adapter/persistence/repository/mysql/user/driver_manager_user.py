@@ -21,11 +21,11 @@ class DriverManagerUser:
                 return None
             return optional.to_entity()
 
-    def find_by_ids(self, *user_id: UserId) -> list[User]:
+    def find_by_ids(self, *user_id: UserId) -> set[User]:
         with self.__unit_of_work.query() as q:
             table_rows: list[UsersTableRow] = q.query(UsersTableRow)\
                 .filter(UsersTableRow.id.in_([_id.value for _id in user_id]))
-            return [tr.to_entity() for tr in table_rows]
+            return set([tr.to_entity() for tr in table_rows])
 
     def find_by_email_address(self, email_address: EmailAddress) -> User | None:
         with self.__unit_of_work.query() as q:

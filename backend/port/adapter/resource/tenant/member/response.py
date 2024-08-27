@@ -9,11 +9,18 @@ from modules.authority.application.member.dpo import MembersDpo, MemberDpo
 
 class MemberJson(BaseModel):
     user_id: str = Field(title="ユーザーID")
+    username: str = Field(title="ユーザー名")
+    email_address: str = Field(title="メールアドレス")
     role: Literal['ADMIN', 'EDITOR', 'READER'] = Field(title="ロール")
 
     @staticmethod
     def from_(dpo: MemberDpo) -> MemberJson:
-        return MemberJson(user_id=dpo.member.user_id.value, role=dpo.member.role.name)
+        return MemberJson(
+            user_id=dpo.member.user_id.value,
+            username=dpo.user.username,
+            email_address=dpo.user.email_address.text,
+            role=dpo.member.role.name
+        )
 
 
 class MemberListJson(BaseModel):
