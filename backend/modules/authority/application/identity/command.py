@@ -33,3 +33,14 @@ class RefreshCommand:
 @dataclass(init=True, unsafe_hash=True, frozen=True)
 class RevokeCommand:
     token: str
+
+
+@dataclass(init=True, unsafe_hash=True, frozen=True)
+class ForgotPasswordCommand:
+    email_address: str
+
+
+@dataclass(init=True, unsafe_hash=True, frozen=True)
+class ResetPasswordCommand:
+    reset_token: str
+    password: str

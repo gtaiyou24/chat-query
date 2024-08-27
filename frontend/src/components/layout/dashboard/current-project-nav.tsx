@@ -2,12 +2,14 @@ import {Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbSeparator} from "@
 import TenantNav from "@/components/layout/dashboard/navbar/tenant-nav";
 import {Slash} from "lucide-react";
 import ProjectNav from "@/components/layout/dashboard/navbar/project-nav";
-import {getProjects, getTenants} from "../../../lib/api";
+import {getProjects, getTenants} from "@/lib/api";
+import {auth} from "@/lib/auth";
 
 
 export default async function CurrentProjectNav({ isGrid = false }: { isGrid?: boolean; }) {
+    const session = await auth();
     const tenants = await getTenants();
-    const projects = await getProjects(tenants[0].id);
+    const projects = await getProjects(session?.currentProject?.tenantId ?? tenants[0].id);
     if (isGrid) {
         return (
             <div className="grid gap-2">

@@ -6,7 +6,7 @@ from datetime import datetime
 from modules.authority.domain.model.user.account import Account
 from modules.authority.domain.model.session import SessionId, Session
 from modules.authority.domain.model.user import EmailAddress, Token, EncryptionService, UserId, \
-    VerificationTokenGenerated
+    VerificationTokenGenerated, PasswordResetTokenGenerated
 from modules.common.domain.model import DomainRegistry, DomainEventPublisher
 
 
@@ -109,6 +109,12 @@ class User:
             DomainEventPublisher\
                 .instance()\
                 .publish(VerificationTokenGenerated(self.id, self.email_address, token))
+
+        if token.is_(Token.Type.PASSWORD_RESET):
+            # ドメインイベントを発行する
+            DomainEventPublisher\
+                .instance()\
+                .publish(PasswordResetTokenGenerated(self.id, self.email_address, token))
 
         return token
 

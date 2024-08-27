@@ -310,6 +310,11 @@ export interface components {
             /** Instance */
             instance: string;
         };
+        /** ForgotPasswordRequest */
+        ForgotPasswordRequest: {
+            /** メールアドレス */
+            email_address: string;
+        };
         /**
          * HTTPStatus
          * @description HTTP status codes and reason phrases
@@ -393,11 +398,25 @@ export interface components {
             /** パスワード */
             password: string;
         };
+        /** ResetPasswordRequest */
+        ResetPasswordRequest: {
+            /** パスワードリセットトークン */
+            token: string;
+            /** パスワード */
+            password: string;
+        };
         /**
          * Role
          * @enum {string}
          */
         Role: "admin" | "editor" | "reader";
+        /** Tenant */
+        Tenant: {
+            /** テナントID */
+            id: string;
+            /** テナント名 */
+            name: string;
+        };
         /** TenantJson */
         TenantJson: {
             /** テナントID */
@@ -432,6 +451,11 @@ export interface components {
             username: string;
             /** メールアドレス */
             email_address: string;
+            /**
+             * 所属テナント一覧
+             * @default []
+             */
+            tenants: components["schemas"]["Tenant"][];
             /**
              * 連携アカウント一覧
              * @default []
@@ -638,7 +662,11 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ForgotPasswordRequest"];
+            };
+        };
         responses: {
             /** @description Successful Response */
             200: {
@@ -647,6 +675,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -658,7 +695,11 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResetPasswordRequest"];
+            };
+        };
         responses: {
             /** @description Successful Response */
             200: {
@@ -667,6 +708,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

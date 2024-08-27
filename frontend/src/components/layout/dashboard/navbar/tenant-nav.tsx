@@ -19,13 +19,28 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import {Tenant} from "@/lib/types";
-import {useState} from "react";
-import {useCurrentProjectStore} from "@/store";
+import {useCallback, useEffect, useState} from "react";
+import {useSession} from "next-auth/react";
 
 export default function TenantNav({ tenants }: { tenants: Tenant[]; }) {
-    const { tenantId, setTenantId } = useCurrentProjectStore();
-    if (!tenantId) setTenantId(tenants[0].id);
+    const {data: session, update} = useSession();
+    const tenantId = session?.currentProject?.tenantId;
+    const setTenantId = useCallback((newTenantId: string) => {
+        update({
+            ...session,
+            currentProject: {
+                tenantId: newTenantId,
+                projectId: session?.currentProject?.tenantId === newTenantId ? session?.currentProject.projectId : undefined
+            }
+        });
+    }, [session]);
     const [open, setOpen] = useState(false);
+
+    useEffect(() => {
+        if (!session?.currentProject?.tenantId) {
+            setTenantId(tenants[0].id);
+        }
+    }, []);
 
     return (
         <Popover open={open} onOpenChange={setOpen}>

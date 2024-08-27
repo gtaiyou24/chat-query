@@ -9,6 +9,10 @@ declare module "next-auth" {
     }
     interface Session {
         user: User["user"];
+        currentProject?: {
+            tenantId: string;
+            projectId?: string;
+        };
         accessToken?: string;
         refreshToken?: string;
         expiresAt?: number;

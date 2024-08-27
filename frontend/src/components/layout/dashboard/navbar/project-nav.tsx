@@ -19,11 +19,21 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import {Project} from "@/lib/types";
-import {useState} from "react";
-import {useCurrentProjectStore} from "@/store";
+import {useCallback, useState} from "react";
+import {useSession} from "next-auth/react";
 
 export default function ProjectNav({ projects }: { projects: Project[]; }) {
-    const { projectId, setProjectId } = useCurrentProjectStore();
+    const {data: session, update} = useSession();
+    const projectId = session?.currentProject?.projectId;
+    const setProjectId = useCallback((newProjectId: string) => {
+        update({
+            ...session,
+            currentProject: {
+                ...session?.currentProject,
+                projectId: newProjectId
+            }
+        })
+    }, [session]);
     if (!projectId) setProjectId(projects[0].id);
     const [open, setOpen] = useState(false)
 

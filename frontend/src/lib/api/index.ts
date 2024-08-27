@@ -68,6 +68,47 @@ export const putAuthToken = async (token?: string): Promise<TokenSet> => {
     return data as TokenSet;
 };
 
+export async function postForgotPassword(email: string) {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/forgot-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            email_address: email
+        })
+    });
+    if (res.status !== 200) {
+        const errorJson = await res.json();
+        switch (errorJson.type) {
+            case 'USER_DOES_NOT_EXISTS':
+                return 'メールアドレスが存在しません。';
+            default:
+                return 'システムエラーが発生しました。しばらくお待ちください。';
+        }
+    }
+}
+
+
+export async function postResetPassword(password: string, token: string) {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/reset-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            password: password,
+            token: token
+        })
+    });
+    if (res.status !== 200) {
+        const errorJson = await res.json();
+        switch (errorJson.type) {
+            case 'VALID_TOKEN_DOES_NOT_EXISTS':
+                return 'トークンの検証に失敗しました。トークンが存在しない、もしくは有効期限が切れています。';
+            default:
+                return 'システムエラーが発生しました。しばらくお待ちください。';
+        }
+    }
+}
+
+
 export const logout = async (token?: string) => {
     const { error } = await createApiClient().DELETE("/auth/token", {
         headers: { "Authorization": `bearer ${token ? token : (await auth())?.accessToken}` },
@@ -90,7 +131,9 @@ export const getMe = async (token?: string): Promise<User> => {
     return {
         username: data.username,
         emailAddress: data.email_address,
-        tenants: [],
+        tenants: data.tenants.map((tenant: components["schemas"]["Tenant"]) => {
+            return {id: tenant.id, name: tenant.name};
+        }),
         accounts: data.accounts.map((account: components["schemas"]["Account"]) => {
             return {provider: account.provider, providerAccountId: account.provider_account_id};
         })

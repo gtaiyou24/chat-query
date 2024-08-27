@@ -1,7 +1,7 @@
 import {UserNav} from "@/components/layout/dashboard/navbar/user-nav";
 import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet";
 import {Button} from "@/components/ui/button";
-import {　Package2, PanelLeft, Settings　} from "lucide-react";
+import {　PanelLeft, Settings　} from "lucide-react";
 import Link from "next/link";
 import CurrentProjectNav from "@/components/layout/dashboard/current-project-nav";
 import {APP_NAME, navItems} from "@/lib/constants";

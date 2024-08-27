@@ -3,10 +3,10 @@ from fastapi import APIRouter, Depends
 
 from modules.authority.application.identity import IdentityApplicationService
 from modules.authority.application.identity.command import ProvisionTenantCommand, AuthenticateUserCommand, \
-    RefreshCommand, RevokeCommand
-from modules.authority.application.identity.dpo import UserDpo
+    RefreshCommand, RevokeCommand, ForgotPasswordCommand, ResetPasswordCommand
 from port.adapter.resource import APIResource
-from port.adapter.resource.auth.request import RegisterTenantRequest, OAuth2PasswordRequest
+from port.adapter.resource.auth.request import RegisterTenantRequest, OAuth2PasswordRequest, ForgotPasswordRequest, \
+    ResetPasswordRequest
 from port.adapter.resource.auth.response import TokenJson
 from port.adapter.resource.dependency import oauth2_scheme
 from port.adapter.resource.error import ErrorJson
@@ -80,11 +80,13 @@ class AuthResource(APIResource):
         command = RevokeCommand(token)
         self.identity_application_service.revoke(command)
 
-    def forgot_password(self) -> None:
-        pass
+    def forgot_password(self, request: ForgotPasswordRequest) -> None:
+        command = ForgotPasswordCommand(request.email_address)
+        self.identity_application_service.forgot_password(command)
 
-    def reset_password(self) -> None:
-        pass
+    def reset_password(self, request: ResetPasswordRequest) -> None:
+        command = ResetPasswordCommand(reset_token=request.token, password=request.password)
+        self.identity_application_service.reset_password(command)
 
     def change_password(self) -> None:
         pass

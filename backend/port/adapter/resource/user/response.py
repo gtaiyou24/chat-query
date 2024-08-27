@@ -28,6 +28,7 @@ class UserJson(BaseModel):
     id: str = Field(title="id")
     username: str = Field(title="ユーザー名")
     email_address: str = Field(title="メールアドレス")
+    tenants: list[Tenant] = Field(title="所属テナント一覧", default=[])
     accounts: list[Account] = Field(title='連携アカウント一覧', default=[])
 
     @staticmethod
@@ -35,4 +36,5 @@ class UserJson(BaseModel):
         return UserJson(id=dpo.user.id.value,
                         username=dpo.user.username,
                         email_address=dpo.user.email_address.text,
+                        tenants=UserJson.Tenant.from_(dpo),
                         accounts=UserJson.Account.from_(dpo))

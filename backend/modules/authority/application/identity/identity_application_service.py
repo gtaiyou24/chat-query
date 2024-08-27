@@ -6,9 +6,9 @@ from injector import singleton, inject
 
 from exception import SystemException, ErrorCode
 from modules.authority.application.identity.command import ProvisionTenantCommand, AuthenticateUserCommand, \
-    RefreshCommand, RevokeCommand
+    RefreshCommand, RevokeCommand, ForgotPasswordCommand, ResetPasswordCommand
 from modules.authority.application.identity.dpo import TenantDpo, SessionDpo, UserDpo
-from modules.authority.application.identity.subscriber import UserProvisionedSubscriber
+from modules.authority.application.identity.subscriber import UserProvisionedSubscriber, PasswordForgotSubscriber
 from modules.authority.domain.model.mail import SendMailService
 from modules.authority.domain.model.session import SessionRepository
 from modules.authority.domain.model.tenant import Tenant, TenantRepository
@@ -145,3 +145,32 @@ class IdentityApplicationService:
         user = self.user_repository.get(session.user_id)
         tenants = self.tenant_repository.tenants_with_user_id(session.user_id)
         return UserDpo(user, tenants)
+
+    @transactional
+    def forgot_password(self, command: ForgotPasswordCommand) -> None:
+        email_address = EmailAddress(command.email_address)
+        user = self.user_repository.user_with_email_address(email_address)
+        if user is None:
+            raise SystemException(
+                ErrorCode.USER_DOES_NOT_FOUND,
+                f"{email_address.text} に紐づくユーザーが見つからなかったため、パスワードリセットメールを送信できませんでした。",
+            )
+
+        # サブスクライバを登録
+        DomainEventPublisher.instance().subscribe(PasswordForgotSubscriber())
+
+        user.generate(Token.Type.PASSWORD_RESET)
+        self.user_repository.add(user)
+
+    @transactional
+    def reset_password(self, command: ResetPasswordCommand) -> None:
+        """新しく設定したパスワードとパスワードリセットトークン指定で新しいパスワードに変更する"""
+        user = self.user_repository.user_with_token(command.reset_token)
+        if user is None or user.token_with(command.reset_token).has_expired():
+            raise SystemException(
+                ErrorCode.VALID_TOKEN_DOES_NOT_EXISTS,
+                f"指定したトークン {command.reset_token} は無効なのでパスワードをリセットできません。",
+            )
+
+        user.reset_password(command.password, command.reset_token)
+        self.user_repository.add(user)

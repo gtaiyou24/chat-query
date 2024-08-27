@@ -3,7 +3,7 @@
 import * as z from "zod";
 
 import {ResetSchema} from "@/components/auth/reset/schema";
-import {pastForgotPassword} from "@/lib/api";
+import {postForgotPassword} from "@/lib/api";
 
 export const reset = async (values: z.infer<typeof ResetSchema>) => {
     const validateFields = ResetSchema.safeParse(values);
@@ -13,7 +13,7 @@ export const reset = async (values: z.infer<typeof ResetSchema>) => {
     }
 
     const { email } = validateFields.data;
-    const error = await pastForgotPassword(email);
+    const error = await postForgotPassword(email);
     if (error) {
         return { error: error };
     }

@@ -77,6 +77,7 @@ export default {
             if (user) {
                 // 初回ログイン時
                 token.user = user.user
+                token.currentProject = { tenantId: user.user.tenants[0]?.id, projectId: undefined };
                 token.accessToken = user.accessToken;
                 token.refreshToken = user.refreshToken;
                 token.expiresAt = user.expiresAt;
@@ -85,6 +86,7 @@ export default {
             if (trigger === "update" && session) {
                 // update(); 実行時にセッションを更新する
                 token.user = session.user;
+                token.currentProject = session.currentProject;
             }
             return token;
         },
@@ -94,8 +96,9 @@ export default {
                 session.refreshToken = token.refreshToken;
                 session.expiresAt = token.expiresAt;
             }
-            if (token?.user) {
+            if (token?.user || token?.currentProject) {
                 session.user = token.user as any;
+                session.currentProject = token.currentProject as any;
             }
             return session;
         },

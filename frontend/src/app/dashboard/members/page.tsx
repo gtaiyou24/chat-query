@@ -1,10 +1,14 @@
 import {MemberTable} from "@/components/member/member-table";
 import {columns} from "@/components/member/columns";
 import {getMembers} from "@/lib/api";
+import {auth} from "@/lib/auth";
+import {notFound} from "next/navigation";
 
 
 export default async function MembersPage() {
-    const members = await getMembers("030a4554-de1d-4d66-96d3-e2fff67e5143");
+    const session = await auth();
+    if (!session) notFound();
+    const members = await getMembers(session.currentProject?.tenantId ?? session.user.tenants[0].id);
     return (
         <div className="container mx-auto mt-8">
             <MemberTable columns={columns} data={members} />
