@@ -6,6 +6,7 @@ import { HandThumbDownIcon, HandThumbUpIcon, TrashIcon, UserIcon } from "@heroic
 import { CpuChipIcon } from "@heroicons/react/24/outline";
 import {getValidVegaSpec} from "@/lib/utils";
 import ReactVega from "@/components/vega/react-vega";
+import DataTable from "@/components/data-table/data-table";
 
 
 export default function ChatMessages({
@@ -74,13 +75,13 @@ export default function ChatMessages({
                                 </div>
                                 <div className="grow pl-8 overflow-x-auto">
                                     <p>{message.content}</p>
-                                    {/*<DataTable*/}
-                                    {/*    data={dataset.dataSource}*/}
-                                    {/*    metas={dataset.fields}*/}
-                                    {/*    onMetaChange={() => {*/}
-                                    {/*        console.log("meta changed");*/}
-                                    {/*    }}*/}
-                                    {/*/>*/}
+                                    <DataTable
+                                        data={dataset.dataSource}
+                                        metas={dataset.fields}
+                                        onMetaChange={() => {
+                                            console.log("meta changed");
+                                        }}
+                                    />
                                 </div>
                             </div>
                         );
