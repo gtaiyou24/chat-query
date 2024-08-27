@@ -9,6 +9,8 @@ import {toast} from "sonner";
 import SelectDataset from "@/components/chat/select-dataset";
 import {Button} from "@/components/ui/button";
 import {matchQuote} from "@/lib/utils";
+import DataTable from "@/components/data-table/data-table";
+import {produce} from "immer";
 
 
 const EXAMPLE_DATASETS: DSItem[] = [
@@ -34,6 +36,7 @@ export default function Chat() {
     const [dataset, setDataset] = useState<Dataset | null>(null);
 
     // チャット
+    const [pivotKey, setPivotKey] = useState<string>("viz");
     const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
 
     useEffect(() => {
@@ -106,8 +109,39 @@ export default function Chat() {
                     />
                 </div>
                 <Button>CSVデータをアップロード</Button>
+                <div className="ml-4">
+                    <span className="isolate inline-flex rounded-md shadow-sm">
+                        <button
+                            type="button"
+                            className={`relative inline-flex items-center rounded-l-md px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-50 ring-1 ring-inset ring-gray-300 dark:ring-gray-500 hover:bg-indigo-500 hover:text-white focus:z-10 ${
+                                pivotKey === "viz"
+                                    ? "bg-indigo-600 border-indigo-600 text-white"
+                                    : ""
+                            }`}
+                            onClick={() => {
+                                setPivotKey("viz");
+                            }}
+                        >
+                            チャット分析
+                        </button>
+                        <button
+                            type="button"
+                            className={`relative -ml-px inline-flex items-center rounded-r-md px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-50 ring-1 ring-inset ring-gray-300 dark:ring-gray-500 hover:bg-indigo-500 hover:text-white focus:z-10 ${
+                                pivotKey === "data"
+                                    ? "bg-indigo-600 border-indigo-600 text-white"
+                                    : ""
+                            }`}
+                            onClick={() => {
+                                setPivotKey("data");
+                            }}
+                        >
+                            データセット
+                        </button>
+                    </span>
+                </div>
             </div>
 
+            {pivotKey === "viz" && (
             <div className="flex flex-col space-between">
                 {(dataset && chatMessages.length !== 0) && <ChatMessages
                     dataset={dataset}
@@ -116,6 +150,29 @@ export default function Chat() {
                 />}
                 <PromptForm onSubmit={onSubmit} onClear={onClear} />
             </div>
+            )}
+            {pivotKey === "data" && (
+                <div>
+                    {dataset && (
+                        <DataTable
+                            data={dataset.dataSource}
+                            metas={dataset.fields}
+                            onMetaChange={(fid, fIndex, meta) => {
+                                const nextDataset = produce(
+                                    dataset,
+                                    (draft) => {
+                                        draft.fields[fIndex] = {
+                                            ...draft.fields[fIndex],
+                                            ...meta,
+                                        };
+                                    }
+                                );
+                                setDataset(nextDataset);
+                            }}
+                        />
+                    )}
+                </div>
+            )}
         </>
     );
 }
