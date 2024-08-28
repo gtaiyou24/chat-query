@@ -1,4 +1,3 @@
-import {UserNav} from "@/components/layout/dashboard/navbar/user-nav";
 import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet";
 import {Button} from "@/components/ui/button";
 import {　PanelLeft, Settings　} from "lucide-react";
@@ -7,6 +6,7 @@ import CurrentProjectNav from "@/components/layout/dashboard/current-project-nav
 import {APP_NAME, navItems} from "@/lib/constants";
 import {Icons} from "@/components/icons";
 import Logo from "@/components/logo";
+import UserNav from "@/components/layout/dashboard/navbar/user-nav";
 
 export default function Navbar() {
     return (

@@ -1,8 +1,7 @@
 import { Button } from '@/components/ui/button';
-import { auth, signOut } from '@/lib/auth';
 import {
     DropdownMenu,
-    DropdownMenuContent,
+    DropdownMenuContent, DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
@@ -10,8 +9,16 @@ import {
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
 import {Avatar, AvatarFallback} from "@/components/ui/avatar";
+import {auth, signOut} from "@/lib/auth";
 
-export async function UserNav() {
+
+const userNavItems = [
+    { title: "アカウント情報", href: "/account" },
+    { title: "セキュリティ", href: "/account/security" },
+    { title: "ログインサービス", href: "/account/login-provider" },
+];
+
+export default async function UserNav() {
     const session = await auth();
     const user = session?.user;
 
@@ -28,32 +35,36 @@ export async function UserNav() {
                         {/*    src={session.user?.image ?? ""}*/}
                         {/*    alt={session.user?.email ?? ""}*/}
                         {/*/>*/}
-                        <AvatarFallback>{session!.user?.name?.substring(0, 2)}</AvatarFallback>
+                        <AvatarFallback>{session?.user?.name?.substring(0, 2)}</AvatarFallback>
                     </Avatar>
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">
+                            {session?.user?.name}
+                        </p>
+                        <p className="text-xs leading-none text-muted-foreground">
+                            {session?.user?.email}
+                        </p>
+                    </div>
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuItem>Support</DropdownMenuItem>
+                <DropdownMenuGroup>
+                    {userNavItems.map((item) => (
+                        <DropdownMenuItem key={item.href} asChild><Link href={item.href}>{item.title}</Link></DropdownMenuItem>
+                    ))}
+                </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                {user ? (
-                    <DropdownMenuItem>
-                        <form
-                            action={async () => {
-                                'use server';
-                                await signOut();
-                            }}
-                        >
-                            <button type="submit">Sign Out</button>
-                        </form>
-                    </DropdownMenuItem>
-                ) : (
-                    <DropdownMenuItem>
-                        <Link href="/login">Sign In</Link>
-                    </DropdownMenuItem>
-                )}
+                <DropdownMenuItem asChild>
+                    <form action={async () => {
+                        "use server"
+                        await signOut({ redirectTo: '/auth/login', redirect: true });
+                    }}>
+                        <button type="submit">ログアウト</button>
+                    </form>
+                </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     );
