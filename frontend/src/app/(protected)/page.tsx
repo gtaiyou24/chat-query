@@ -1,7 +1,7 @@
 import Chat from "@/components/chat/chat";
 
 
-export default function Page() {
+export default function HomePage() {
     return (
         <div className="container mx-auto px-48">
             <div className="text-5xl font-extrabold flex justify-center mt-8">

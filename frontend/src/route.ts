@@ -3,7 +3,7 @@
  * @type {string[]}
  */
 export const publicRoutes = [
-    "^/$",  // ホーム画面
+    // "^/$",  // ホーム画面
     "^/auth/new-verification",  // 認証画面
     "^/privacy-policy",  // プライバシーポリシー
     "^/terms-of-service",  // 利用規約
@@ -34,4 +34,4 @@ export const apiAuthPrefix = "/api/auth";
  * ログイン済みのユーザーがデフォルトでリダイレクトするページパス
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT = "/dashboard";
+export const DEFAULT_LOGIN_REDIRECT = "/";

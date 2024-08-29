@@ -16,7 +16,11 @@ export const STORAGES = {
 }
 
 export const navItems: {href: string; label: string; icon: keyof typeof Icons}[] = [
-    {href: '/dashboard', label: 'ダッシュボード', icon: "home"},
-    {href: '/dashboard/members', label: 'メンバー', icon: 'users2'},
-    {href: '/dashboard/analytics', label: '分析', icon: 'lineChart'},
+    {href: '/', label: '分析', icon: 'lineChart'},
+    // {href: '/', label: 'ホーム', icon: "home"},
+    // {href: '/analytics', label: '分析', icon: 'lineChart'},
+
+    {href: '/dataset', label: 'データセット', icon: 'database'},
+    {href: '/dashboard', label: 'ダッシュボード', icon: 'layoutDashboard'},
+    {href: '/members', label: 'メンバー', icon: 'users2'},
 ];

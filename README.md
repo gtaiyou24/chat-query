@@ -6,10 +6,10 @@
  - 開発言語 : Python
  - フレームワーク : [FastAPI](https://fastapi.tiangolo.com/)
  - DB : MySQL / Redis
- - インフラ環境 : GCP Cloud Run / [Neon](https://neon.tech/) / [Upstash](https://upstash.com/)
  - CI/CD : [GitHub Actions](https://docs.github.com/ja/actions)
- - インフラツール : Terraform
- - エラー/ログ監視 : Sentry / Datadog
+ - インフラ環境 : GCP Cloud Run / [Neon](https://neon.tech/) / [Upstash](https://upstash.com/)
+ - IaC : Terraform
+ - エラー/ログ監視 : Sentry / New Relic
 
 ### 🔧Frontend
 
@@ -20,8 +20,8 @@
  - グローバルステート管理 : [zustand](https://zustand-demo.pmnd.rs/)
  - CI/CD : [GitHub Actions](https://docs.github.com/ja/actions)
  - インフラ環境 : GCP Cloud Run
- - インフラツール : Terraform
- - エラー/ログ監視 : Sentry / Datadog
+ - IaC : Terraform
+ - エラー/ログ監視 : Sentry / New Relic
 
 ## ❓How To
 <details><summary><b>🏃 Start</b></summary>
