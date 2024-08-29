@@ -1,3 +1,4 @@
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 
 
 export default function DatasetPage() {
@@ -7,7 +8,14 @@ export default function DatasetPage() {
                 <h1 className="text-2xl font-bold">データセット</h1>
 
             </div>
-            fafa
+            <Tabs defaultValue="file" className="w-[400px]">
+                <TabsList>
+                    <TabsTrigger value="file">ファイル</TabsTrigger>
+                    <TabsTrigger value="database">データベース</TabsTrigger>
+                </TabsList>
+                <TabsContent value="file">Make changes to your account here.</TabsContent>
+                <TabsContent value="database">Change your password here.</TabsContent>
+            </Tabs>
         </div>
     );
 }
