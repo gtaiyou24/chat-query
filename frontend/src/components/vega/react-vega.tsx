@@ -1,4 +1,6 @@
-import { useEffect, useRef } from "react";
+"use client";
+
+import {useEffect, useRef} from "react";
 import embed, { vega } from 'vega-embed';
 import {Row} from "@/lib/types";
 import {useCurrentMediaTheme, VegaTheme} from "@/components/vega/theme";
