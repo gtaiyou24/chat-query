@@ -41,6 +41,7 @@
     "react-hook-form": "^7.52.2",
     "react-icons": "^5.2.1",
     "react-spinners": "^0.14.1",
+    "react-vega": "^7.6.0",
     "sonner": "^1.5.0",
     "styled-components": "^6.1.12",
     "tailwind-merge": "^2.4.0",
