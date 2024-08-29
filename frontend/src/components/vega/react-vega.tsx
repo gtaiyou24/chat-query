@@ -6,10 +6,14 @@ import {useCurrentMediaTheme, VegaTheme} from "@/components/vega/theme";
 
 export default function ReactVega({
     spec,
-    data
+    data,
+    width = 400,
+    height = 400
 }: {
     spec: any;
-    data?: Row[]
+    data?: Row[];
+    width?: number;
+    height?: number;
 }) {
     const container = useRef<HTMLDivElement>(null);
 
@@ -24,13 +28,12 @@ export default function ReactVega({
                 res.view.change('dataSource', vega.changeset().remove(() => true).insert(data))
                 res.view.resize();
 
-                // NOTE : 見やすいようにとりあえず 400px に固定
-                res.view.width(400);
-                res.view.height(400);
+                if (width) res.view.width(width);
+                if (height) res.view.height(height);
 
                 res.view.runAsync();
             })
         }
     }, [spec, data, theme])
-    return <div ref={container}></div>
+    return <div ref={container} style={{ width: '100%', height: '100%' }}></div>
 }

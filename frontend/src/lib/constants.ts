@@ -20,7 +20,7 @@ export const navItems: {href: string; label: string; icon: keyof typeof Icons}[]
     // {href: '/', label: 'ホーム', icon: "home"},
     // {href: '/analytics', label: '分析', icon: 'lineChart'},
 
-    {href: '/dataset', label: 'データセット', icon: 'database'},
     {href: '/dashboard', label: 'ダッシュボード', icon: 'layoutDashboard'},
+    {href: '/dataset', label: 'データセット', icon: 'database'},
     {href: '/members', label: 'メンバー', icon: 'users2'},
 ];

@@ -18,8 +18,8 @@ type Dataset = {
 
 // ダミーデータ
 const initialDatasets: Dataset[] = [
-    { id: '1', name: 'Sales 2023', type: 'file', source: 'sales_2023.csv', lastUpdated: '2023-12-31' },
-    { id: '2', name: 'Customer Database', type: 'database', source: 'customers_db', lastUpdated: '2024-03-15' },
+    { id: '1', name: '【デモ】車', type: 'file', source: 'sales_2023.csv', lastUpdated: '2023-12-31' },
+    { id: '2', name: '顧客一覧', type: 'database', source: 'customers.json', lastUpdated: '2024-03-15' },
 ];
 
 export default function DatasetPage() {
