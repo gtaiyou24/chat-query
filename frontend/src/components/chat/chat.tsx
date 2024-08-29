@@ -26,6 +26,12 @@ const EXAMPLE_DATASETS: DSItem[] = [
         url: "/datasets/students.json",
         type: "demo",
     },
+    {
+        key: "customers",
+        name: "顧客一覧",
+        url: "/datasets/customers.json",
+        type: "demo",
+    },
 ];
 
 
