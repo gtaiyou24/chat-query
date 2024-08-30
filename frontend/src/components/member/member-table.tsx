@@ -27,7 +27,7 @@ export function MemberTable<TData, TValue>({
 }: MemberTableProps<TData, TValue>) {
     const table = useReactTable({ data, columns, getCoreRowModel: getCoreRowModel() });
     return (
-        <div className="rounded-md border">
+        <div className="rounded-md border bg-primary-foreground">
             <Table>
                 <TableHeader>
                     {table.getHeaderGroups().map((headerGroup) => (
