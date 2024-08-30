@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ReactVega from "@/components/vega/react-vega";
 import {toast} from "sonner";
 import {Dataset} from "@/lib/types";
+import DataTable from "@/components/data-table/data-table";
+import {produce} from "immer";
 
 export default function DashboardPage() {
     const [dataset, setDataset] = useState<Dataset | null>(null);
@@ -22,7 +24,7 @@ export default function DashboardPage() {
 
     return (
         <div className="p-6 space-y-6">
-            <h1 className="text-3xl font-bold mb-6">ダッシュボード</h1>
+            <h1 className="text-2xl font-bold">ダッシュボード</h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <Card>
@@ -52,6 +54,31 @@ export default function DashboardPage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>「大人の焼き物オンラインショップ」の顧客一覧</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        {dataset && (
+                            <DataTable
+                                data={dataset.dataSource}
+                                metas={dataset.fields}
+                                onMetaChange={(fid, fIndex, meta) => {
+                                    const nextDataset = produce(
+                                        dataset,
+                                        (draft) => {
+                                            draft.fields[fIndex] = {
+                                                ...draft.fields[fIndex],
+                                                ...meta,
+                                            };
+                                        }
+                                    );
+                                    setDataset(nextDataset);
+                                }}
+                            />
+                        )}
+                    </CardContent>
+                </Card>
                 <Card>
                     <CardHeader>
                         <CardTitle>購入者数の推移</CardTitle>
