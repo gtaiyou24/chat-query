@@ -39,7 +39,7 @@ export default function SelectDataset({
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-[200px] justify-between"
+                    className="w-[200px] justify-between bg-primary-foreground"
                 >
                     {value
                         ? items.find((item) => item.key === value)?.name

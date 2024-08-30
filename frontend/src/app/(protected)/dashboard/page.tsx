@@ -28,17 +28,20 @@ export default function DashboardPage() {
         <div className="p-6 space-y-6">
             <div className="flex justify-between">
                 <h1 className="text-2xl font-bold">ダッシュボード</h1>
-                <div>
-                    <Button>
-                        <PlusCircle className="mr-2 h-4 w-4" /> データを追加
-                    </Button>
-                </div>
+                <Button>
+                    <PlusCircle className="mr-2 h-4 w-4" /> データを追加
+                </Button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <Card className="bg-primary-foreground">
                     <CardHeader>
-                        <CardTitle className="text-base">顧客数</CardTitle>
+                        <div className="flex justify-between">
+                            <CardTitle className="text-lg">顧客数</CardTitle>
+                            <Button size="sm">
+                                <PlusCircle className="mr-2 h-4 w-4" /> 編集
+                            </Button>
+                        </div>
                         <CardDescription>3日前</CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -47,7 +50,12 @@ export default function DashboardPage() {
                 </Card>
                 <Card className="bg-primary-foreground">
                     <CardHeader>
-                        <CardTitle className="text-base">総購入金額</CardTitle>
+                        <div className="flex justify-between">
+                            <CardTitle className="text-base">総購入金額</CardTitle>
+                            <Button size="sm">
+                                <PlusCircle className="mr-2 h-4 w-4" /> 編集
+                            </Button>
+                        </div>
                         <CardDescription>3日前</CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -56,7 +64,12 @@ export default function DashboardPage() {
                 </Card>
                 <Card className="bg-primary-foreground">
                     <CardHeader>
-                        <CardTitle className="text-base">総分析回数</CardTitle>
+                        <div className="flex justify-between">
+                            <CardTitle className="text-base">総分析回数</CardTitle>
+                            <Button size="sm">
+                                <PlusCircle className="mr-2 h-4 w-4" /> 編集
+                            </Button>
+                        </div>
                         <CardDescription>3日前</CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -68,7 +81,12 @@ export default function DashboardPage() {
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
                 <Card className="bg-primary-foreground">
                     <CardHeader>
-                        <CardTitle className="text-base">「大人の焼き物オンラインショップ」の顧客一覧</CardTitle>
+                        <div className="flex justify-between">
+                            <CardTitle className="text-base">「大人の焼き物オンラインショップ」の顧客一覧</CardTitle>
+                            <Button size="sm">
+                                <PlusCircle className="mr-2 h-4 w-4" /> 編集
+                            </Button>
+                        </div>
                         <CardDescription>3日前</CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -94,7 +112,12 @@ export default function DashboardPage() {
                 </Card>
                 <Card className="bg-primary-foreground">
                     <CardHeader>
-                        <CardTitle className="text-base">購入者数の推移</CardTitle>
+                        <div className="flex justify-between">
+                            <CardTitle className="text-base">購入者数の推移</CardTitle>
+                            <Button size="sm">
+                                <PlusCircle className="mr-2 h-4 w-4" /> 編集
+                            </Button>
+                        </div>
                         <CardDescription>3日前</CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -123,7 +146,12 @@ export default function DashboardPage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <Card className="bg-primary-foreground">
                     <CardHeader>
-                        <CardTitle className="text-base">購入回数</CardTitle>
+                        <div className="flex justify-between">
+                            <CardTitle className="text-base">購入回数</CardTitle>
+                            <Button size="sm">
+                                <PlusCircle className="mr-2 h-4 w-4" /> 編集
+                            </Button>
+                        </div>
                         <CardDescription>3日前</CardDescription>
                     </CardHeader>
                     <CardContent>
