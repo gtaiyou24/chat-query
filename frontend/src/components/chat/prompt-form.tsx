@@ -3,6 +3,7 @@
 import {useCallback, useState} from "react";
 import {PaperAirplaneIcon, TrashIcon} from "@heroicons/react/20/solid";
 import {Spinner} from "@radix-ui/themes";
+import {Button} from "@/components/ui/button";
 
 
 export default function PromptForm({
@@ -46,17 +47,12 @@ export default function PromptForm({
                     }
                 }}
             />
-            <button
-                type="button"
-                className="flex items-center grow-0 rounded-r-md bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={loading || userMessage.length === 0}
-                onClick={startQuery}
-            >
+            <Button className="rounded-l-none" disabled={loading || userMessage.length === 0} onClick={startQuery}>
                 {!loading && (
                     <PaperAirplaneIcon className="w-4 ml-1" />
                 )}
                 {loading && <Spinner />}
-            </button>
+            </Button>
         </div>
     );
 }
