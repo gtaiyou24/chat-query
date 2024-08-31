@@ -1,17 +1,18 @@
 import Chat from "@/components/chat/chat";
+import {Button} from "@/components/ui/button";
+import {PlusCircle} from "lucide-react";
+import React from "react";
 
 
 export default function HomePage() {
     return (
-        <div className="container mx-auto px-48">
-            <div className="text-5xl font-extrabold flex justify-center mt-8">
-                <h1 className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
-                    Analytics GPT
-                </h1>
+        <div className="p-6 space-y-6">
+            <div className="flex justify-between">
+                <h1 className="text-2xl font-bold">分析</h1>
+                <Button>
+                    <PlusCircle className="mr-2 h-4 w-4" /> データを追加
+                </Button>
             </div>
-            <p className="text-center my-2">
-                表形式のデータセットからチャットインターフェイスを使ってコンテキストに沿ったデータの可視化を行います。
-            </p>
             <Chat />
         </div>
     );
