@@ -82,7 +82,7 @@ export default function DashboardPage() {
                 <Card className="bg-primary-foreground">
                     <CardHeader>
                         <div className="flex justify-between">
-                            <CardTitle className="text-base">「大人の焼き物オンラインショップ」の顧客一覧</CardTitle>
+                            <CardTitle className="text-base">顧客一覧</CardTitle>
                             <Button size="sm">
                                 <PlusCircle className="mr-2 h-4 w-4" /> 編集
                             </Button>
