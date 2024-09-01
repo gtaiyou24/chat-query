@@ -7,9 +7,6 @@
  - フレームワーク : [FastAPI](https://fastapi.tiangolo.com/)
  - DB : MySQL / Redis
  - CI/CD : [GitHub Actions](https://docs.github.com/ja/actions)
- - インフラ環境 : GCP Cloud Run / [Neon](https://neon.tech/) / [Upstash](https://upstash.com/)
- - IaC : Terraform
- - エラー/ログ監視 : Sentry / New Relic
 
 ### 🔧Frontend
 
@@ -19,7 +16,10 @@
  - CSS : [Tailwind](https://tailwindcss.com/) / [shadcn/ui](https://ui.shadcn.com/) / [Headless UI](https://headlessui.com/)
  - グローバルステート管理 : [zustand](https://zustand-demo.pmnd.rs/)
  - CI/CD : [GitHub Actions](https://docs.github.com/ja/actions)
- - インフラ環境 : GCP Cloud Run
+
+### ⚙️Infrastructure
+
+ - インフラ環境 : GCP Cloud Run / [Neon](https://neon.tech/) / [Upstash](https://upstash.com/)
  - IaC : Terraform
  - エラー/ログ監視 : Sentry / New Relic
 
