@@ -2,7 +2,7 @@ from typing import override
 
 from openai import OpenAI
 
-from modules.scraper.domain.model.llm import Messages, LLMService, Prompt
+from modules.analytics.domain.model.llm import Messages, Message
 from port.adapter.service.llm.adapter import LLMAdapter
 
 
@@ -12,12 +12,12 @@ class OpenAIAdapter(LLMAdapter):
         self.__model_name = model_name
 
     @override
-    def chat(self, messages: Messages, format: LLMService.Format) -> Messages:
+    def chat(self, messages: Messages) -> Messages:
         response = self.__client.chat.completions.create(
             model=self.__model_name,
-            messages=[{"role": prompt.role.value, "content": prompt.content} for prompt in messages.prompts],
-            response_format={"type": "json_object"}
+            messages=[{"role": m.role.value, "content": m.content} for m in messages.list],
+            response_format={"type": "text"},
+            temperature=0
         )
         content: str = response.choices[0].message.content
-        messages = messages.append(Prompt.Role.ASSISTANT.make(content))
-        return messages
+        return messages.replay(Message.Role.ASSISTANT(content))

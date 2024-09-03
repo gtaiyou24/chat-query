@@ -13,6 +13,8 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse
 
 from exception import SystemException
+from modules.analytics.domain.model.database import DataBaseService
+from modules.analytics.domain.model.llm import LLMService
 from modules.authority.domain.model.mail import SendMailService
 from modules.authority.domain.model.session import SessionRepository
 from modules.authority.domain.model.tenant import TenantRepository
@@ -26,11 +28,18 @@ from port.adapter.persistence.repository.mysql.project import MySQLProjectReposi
 from port.adapter.persistence.repository.mysql.session import MySQLSessionRepository
 from port.adapter.persistence.repository.mysql.tenant import MySQLTenantRepository
 from port.adapter.persistence.repository.mysql.user import MySQLUserRepository
+from port.adapter.resource.analytics import AnalyticsResource
 from port.adapter.resource.auth import AuthResource
 from port.adapter.resource.health import HealthResource
 from port.adapter.resource.tenant.member import MemberResource
 from port.adapter.resource.tenant.tenant_resource import TenantResource
 from port.adapter.resource.user import UserResource
+from port.adapter.service.database import DataBaseServiceImpl
+from port.adapter.service.database.adapter import DataBaseAdapter
+from port.adapter.service.database.adapter.bigquery import BigQueryAdapter
+from port.adapter.service.llm import LLMServiceImpl
+from port.adapter.service.llm.adapter import LLMAdapter
+from port.adapter.service.llm.adapter.openai import OpenAIAdapter
 from port.adapter.service.mail import SendMailServiceImpl
 from port.adapter.service.mail.adapter import MailDeliveryAdapter
 from port.adapter.service.mail.adapter.gmail import GmailAdapter
@@ -58,6 +67,8 @@ async def lifespan(app: FastAPI):
         DI.of(TenantRepository, {"MySQL": MySQLTenantRepository}, InMemTenantRepository),
         DI.of(UserRepository, {"MySQL": MySQLUserRepository}, InMemUserRepository),
         # Service
+        DI.of(DataBaseService, {}, DataBaseServiceImpl),
+        DI.of(LLMService, {}, LLMServiceImpl),
         DI.of(SendMailService, {}, SendMailServiceImpl),
         DI.of(EncryptionService, {}, EncryptionServiceImpl),
         # Adapter
@@ -66,6 +77,8 @@ async def lifespan(app: FastAPI):
             {"SendGrid": SendGridAdapter, "MailHog": MailHogAdapter, "Gmail": GmailAdapter},
             MailDeliveryAdapterStub
         ),
+        DI.of(DataBaseAdapter, {}, BigQueryAdapter),
+        DI.of(LLMAdapter, {}, OpenAIAdapter(os.getenv('OPENAI_API_KEY'), 'gpt-4o'))
     )
     yield
     # 終了後
@@ -79,6 +92,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.include_router(AnalyticsResource().router)
 app.include_router(AuthResource().router)
 app.include_router(HealthResource().router)
 app.include_router(TenantResource().router)
