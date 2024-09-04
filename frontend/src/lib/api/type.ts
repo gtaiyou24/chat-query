@@ -4,6 +4,40 @@
  */
 
 export interface paths {
+    "/analytics/chat": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** チャット */
+        post: operations["\u30C1\u30E3\u30C3\u30C8_analytics_chat_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/analytics/dataset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** データセット取得 */
+        post: operations["\u30C7\u30FC\u30BF\u30BB\u30C3\u30C8\u53D6\u5F97_analytics_dataset_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/auth/register": {
         parameters: {
             query?: never;
@@ -300,6 +334,30 @@ export interface components {
             /** 新しいロール */
             new_role: components["schemas"]["Role"];
         };
+        /** ChatRequest */
+        ChatRequest: {
+            /** メッセージ一覧 */
+            messages: components["schemas"]["Message-Input"][];
+        };
+        /** ChatResponse */
+        ChatResponse: {
+            /** メッセージ一覧 */
+            messages: components["schemas"]["Message-Output"][];
+        };
+        /** DataField */
+        DataField: {
+            /** フィールド名 */
+            name: string;
+        };
+        /** DataSetResponse */
+        DataSetResponse: {
+            /** フィールド一覧 */
+            fields: components["schemas"]["DataField"][];
+            /** データソース */
+            data_source: Record<string, never>[];
+            /** クエリー */
+            query: string;
+        };
         /** ErrorJson */
         ErrorJson: {
             /** Type */
@@ -367,6 +425,27 @@ export interface components {
         MemberListJson: {
             /** メンバー一覧 */
             members: components["schemas"]["MemberJson"][];
+        };
+        /** Message */
+        "Message-Input": {
+            /**
+             * ロール
+             * @default user
+             * @enum {string}
+             */
+            role: "user" | "system" | "assistant";
+            /** コンテンツ */
+            content: string;
+        };
+        /** Message */
+        "Message-Output": {
+            /**
+             * ロール
+             * @enum {string}
+             */
+            role: "user" | "system" | "assistant";
+            /** コンテンツ */
+            content: string;
         };
         /** OAuth2PasswordRequest */
         OAuth2PasswordRequest: {
@@ -480,6 +559,72 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    "\u30C1\u30E3\u30C3\u30C8_analytics_chat_post": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChatRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    "\u30C7\u30FC\u30BF\u30BB\u30C3\u30C8\u53D6\u5F97_analytics_dataset_post": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChatRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataSetResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     "\u30E6\u30FC\u30B6\u30FC\u767B\u9332_auth_register_post": {
         parameters: {
             query?: never;

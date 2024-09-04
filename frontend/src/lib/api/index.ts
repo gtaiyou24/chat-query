@@ -2,7 +2,7 @@ import {auth} from "@/lib/auth";
 import {createApiClient} from "@/lib/api/create-client";
 import {components} from "@/lib/api/type";
 import {TokenSet} from "next-auth";
-import {Member, Project, Tenant, User} from "@/lib/types";
+import {ChatMessage, Dataset, DSItem, Field, Member, Project, Row, SemanticType, Tenant, User} from "@/lib/types";
 import {TAGS} from "@/lib/constants";
 
 
@@ -185,4 +185,27 @@ export const getMembers = async (tenantId: string, token?: string): Promise<Memb
             role: member.role.toLowerCase() as "admin" | "editor" | "reader"
         };
     });
+}
+
+export const fetchDateSet = async (messages: ChatMessage[]): Promise<DSItem> => {
+    const {data, error} = await createApiClient().POST("/analytics/dataset", {
+        headers: { "Content-Type": "application/json" },
+        body: { messages: messages },
+    });
+    if (error) {
+        throw Error("データセットの取得に失敗しました");
+    }
+    return {
+        key: '1',
+        name: '1',
+        dataset: {
+            fields: data.fields.map((field) => ({
+                fid: field.name,
+                name: field.name,
+                semanticType: 'nominal'
+            })),
+            dataSource: data.data_source
+        },
+        type: "custom"
+    };
 }
