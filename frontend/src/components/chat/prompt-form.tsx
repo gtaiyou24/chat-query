@@ -2,15 +2,15 @@
 
 import {useCallback, useState} from "react";
 import {PaperAirplaneIcon, TrashIcon} from "@heroicons/react/20/solid";
-import {Spinner} from "@radix-ui/themes";
 import {Button} from "@/components/ui/button";
+import Loading from "@/components/loading";
 
 
 export default function PromptForm({
     onSubmit,
     onClear
 }: {
-    onSubmit: (message: string) => void;
+    onSubmit: (message: string) => Promise<void>;
     onClear: () => void;
 }) {
     const [userMessage, setUserMessage] = useState("");
@@ -19,9 +19,11 @@ export default function PromptForm({
     const clearChat = useCallback(() => onClear(), []);
     const startQuery = useCallback(() => {
         setLoading(true);
-        onSubmit(userMessage);
-        setLoading(false);
-        setUserMessage("");
+        onSubmit(userMessage)
+            .finally(() => {
+                setLoading(false);
+                setUserMessage("");
+            });
     }, [userMessage]);
 
     return (
@@ -41,17 +43,10 @@ export default function PromptForm({
                 placeholder="データセットから何を可視化したいですか？"
                 value={userMessage}
                 onChange={(e) => setUserMessage(e.target.value)}
-                onKeyDown={(e) => {
-                    if (e.key === "Enter" && !loading && userMessage.length > 0) {
-                        startQuery();
-                    }
-                }}
             />
             <Button className="rounded-l-none" disabled={loading || userMessage.length === 0} onClick={startQuery}>
-                {!loading && (
-                    <PaperAirplaneIcon className="w-4 ml-1" />
-                )}
-                {loading && <Spinner />}
+                {!loading && <PaperAirplaneIcon className="w-4 ml-1" />}
+                {loading && <Loading />}
             </Button>
         </div>
     );

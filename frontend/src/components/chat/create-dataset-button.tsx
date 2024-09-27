@@ -15,23 +15,24 @@ import {ChatMessage, Dataset, DSItem} from "@/lib/types";
 import {chatDateSet} from "@/components/chat/chat-completion";
 import {toast} from "sonner";
 import DataTable from "@/components/data-table/data-table";
-import ChatMessages from "@/components/chat/chat-messages";
 
 
 export default function CreateDatasetButton() {
     const [dataset, setDataset] = useState<Dataset | null>(null);
     const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
-    const onSubmit = (message: string) => {
+    const onSubmit = (message: string): Promise<void> => {
         const lastMessage: ChatMessage = {role: "user", content: message};
 
-        chatDateSet([...chatMessages, lastMessage])
+        return chatDateSet([...chatMessages, lastMessage])
             .then((dsItem: DSItem) => {
                 if (dsItem.type === "custom") {
                     setDataset(dsItem.dataset);
                 }
                 setChatMessages([...chatMessages, lastMessage]);
             })
-            .catch((reason) => toast(reason.message))
+            .catch((reason) => {
+                toast(reason.message)
+            })
     }
 
     useEffect(() => {

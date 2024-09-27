@@ -63,10 +63,10 @@ export default function Chat() {
         }
     }, [datasetKey, dsItems]);
 
-    const onSubmit = (message: string) => {
+    const onSubmit = (message: string): Promise<void> => {
         const lastMessage: ChatMessage = { role: "user", content: message };
         const fields = dataset?.fields ?? [];
-        chatCompletion([...chatMessages, lastMessage], fields)
+        return chatCompletion([...chatMessages, lastMessage], fields)
             .then((res) => {
                 if (res.choices.length > 0) {
                     const spec = matchQuote(res.choices[0].message.content, "{", "}");
