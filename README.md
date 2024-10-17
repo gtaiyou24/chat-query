@@ -1,4 +1,4 @@
-# Analytics GPT
+# Chat Query
 
 ## 🛠Technology
 ### 🔨Backend
