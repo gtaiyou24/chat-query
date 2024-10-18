@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
             3. You should consider to aggregate the field if it is quantitative and the chart has a mark type of react, bar, line, area or arc.
             4. Consider to use bin for field if it is a chart like heatmap or histogram.
             5. The available fields in the dataset and their types are:
+            6. add a tooltip by default.
             ${metas
                 .map((field) => `${field.name} (${field.semanticType})`)
                 .join(", ")}
@@ -59,7 +60,7 @@ async function getCompletion(messages: ChatMessage[]): Promise<ChatResponse> {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${process.env.OPENAI_KEY}`
+            "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
         },
         body: JSON.stringify({
             "model": "gpt-4o-mini",
